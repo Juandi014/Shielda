@@ -1,4 +1,4 @@
-export class SessionModel {
+export class Session {
     id?: string;
     token?: string;
     expiration?: Date;
