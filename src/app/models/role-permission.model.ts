@@ -1,4 +1,4 @@
-export class RolePermissionModel {
+export class RolePermission {
     id?: string;
     startAt?: Date;
     endAt?: Date;

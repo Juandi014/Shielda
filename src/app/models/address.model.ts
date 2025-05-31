@@ -1,4 +1,4 @@
-export class AddressModel {
+export class Address {
   id?: number;
   street?: string;
   number?: string;

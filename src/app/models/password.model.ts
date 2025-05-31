@@ -1,4 +1,4 @@
-export class PasswordModel {
+export class Password {
     id?: number;
     content?: string;
     startAt?: Date;
