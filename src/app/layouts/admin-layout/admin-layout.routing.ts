@@ -16,8 +16,6 @@ export const AdminLayoutRoutes: Routes = [
         path: 'theaters',
         children: [
             {
-                path: '',
-                loadChildren: () => import('src/app/pages/theaters/theaters.module').then(m => m.TheatersModule)
             }
         ]
     }
