@@ -13,9 +13,15 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'icons', component: IconsComponent },
     { path: 'maps', component: MapsComponent },
     {
-        path: 'theaters',
+        path: 'roles',
         children: [
             {
+                path: '',
+                loadChildren: () => import('src/app/pages/roles/roles.module').then(m => m.RolesModule)
+            },
+            {
+                path: '',
+                loadChildren: () => import('src/app/pages/user-role/user-role.module').then(m => m.UserRoleModule)
             }
         ]
     }
