@@ -10,21 +10,21 @@ import { environment } from 'src/environments/environment';
 export class RoleService {
   constructor(private http: HttpClient) { }
   list(): Observable<Role[]> {
-    return this.http.get<Role[]>(`${environment.url_ms_cinema}/theaters`);
+    return this.http.get<Role[]>(`${environment.url_ms_cinema}/api/roles`);
   }
   view(id: number): Observable<Role> {
-    return this.http.get<Role>(`${environment.url_ms_cinema}/theaters/${id}`);
+    return this.http.get<Role>(`${environment.url_ms_cinema}/api/roles/${id}`);
   }
-  create(newTheater: Role): Observable<Role> {
-    delete newTheater.id;
-    return this.http.post<Role>(`${environment.url_ms_cinema}/theaters`, newTheater);
+  create(newRole: Role): Observable<Role> {
+    delete newRole.id;
+    return this.http.post<Role>(`${environment.url_ms_cinema}/api/roles`, newRole);
   }
-  update(theTheater: Role): Observable<Role> {
-    return this.http.put<Role>(`${environment.url_ms_cinema}/theaters/${theTheater.id}`, theTheater);
+  update(theRole: Role): Observable<Role> {
+    return this.http.put<Role>(`${environment.url_ms_cinema}/api/roles/${theRole.id}`, theRole);
   }
 
   delete(id: number) {
-    return this.http.delete<Role>(`${environment.url_ms_cinema}/theaters/${id}`);
+    return this.http.delete<Role>(`${environment.url_ms_cinema}/api/roles/${id}`);
   }
 
 }

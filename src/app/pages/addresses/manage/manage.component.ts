@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Role } from 'src/app/models/role.model';
-import { RoleService } from 'src/app/services/role.service';
+import { Address } from 'src/app/models/address.model';
+import { AddressService } from 'src/app/services/address.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -12,16 +12,16 @@ import Swal from 'sweetalert2';
 })
 export class ManageComponent implements OnInit {
   mode: number; // 1: view, 2: create, 3: update
-  Role: Role;
+  Address: Address;
   theFormGroup: FormGroup; // Policía de formulario
   trySend: boolean;
   constructor(private activatedRoute: ActivatedRoute,
-    private RolesService: RoleService,
+    private AddressesService: AddressService,
     private router: Router,
     private theFormBuilder: FormBuilder //Definir las reglas
   ) {
     this.trySend = false;
-    this.Role = { id: 0 };
+    this.Address = { id: 0 };
     this.configFormGroup()
   }
 
@@ -35,8 +35,8 @@ export class ManageComponent implements OnInit {
       this.mode = 3;
     }
     if (this.activatedRoute.snapshot.params.id) {
-      this.Role.id = this.activatedRoute.snapshot.params.id
-      this.getRole(this.Role.id)
+      this.Address.id = this.activatedRoute.snapshot.params.id
+      this.getAddress(this.Address.id)
     }
 
   }
@@ -45,8 +45,10 @@ export class ManageComponent implements OnInit {
       // primer elemento del vector, valor por defecto
       // lista, serán las reglas
       id: [0,[]],
-      name: ['', [Validators.required, Validators.minLength(2)]],
-      description: ['', [Validators.required, Validators.minLength(2)]]
+      street: ['', [Validators.required, Validators.minLength(2)]],
+      number: ['', [Validators.required, Validators.minLength(2)]],
+      latitude: [0,[]],
+      longitude: [0,[]]
     })
   }
 
@@ -55,26 +57,28 @@ export class ManageComponent implements OnInit {
     return this.theFormGroup.controls
   }
 
-  getRole(id: number) {
-    this.RolesService.view(id).subscribe({
+  getAddress(id: number) {
+    this.AddressesService.view(id).subscribe({
       next: (response) => {
-        this.Role = response;
+        this.Address = response;
 
         this.theFormGroup.patchValue({
-          id: this.Role.id,
-          name: this.Role.name,
-          description: this.Role.description
+          id: this.Address.id,
+          street: this.Address.street,
+          number: this.Address.number,
+          latitude: this.Address.latitude,
+          longitude: this.Address.longitude,
         });
         
-        console.log('Role fetched successfully:', this.Role);
+        console.log('Address fetched successfully:', this.Address);
       },
       error: (error) => {
-        console.error('Error fetching Role:', error);
+        console.error('Error fetching Address:', error);
       }
     });
   }
   back() {
-    this.router.navigate(['/Roles/list']);
+    this.router.navigate(['/Addresses/list']);
   }
 
   create() {
@@ -87,18 +91,18 @@ export class ManageComponent implements OnInit {
       })
       return;
     }
-    this.RolesService.create(this.theFormGroup.value).subscribe({
-      next: (Role) => {
-        console.log('Role created successfully:', Role);
+    this.AddressesService.create(this.theFormGroup.value).subscribe({
+      next: (Address) => {
+        console.log('Address created successfully:', Address);
         Swal.fire({
           title: 'Creado!',
           text: 'Registro creado correctamente.',
           icon: 'success',
         })
-        this.router.navigate(['/Roles/list']);
+        this.router.navigate(['/Addresses/list']);
       },
       error: (error) => {
-        console.error('Error creating Role:', error);
+        console.error('Error creating Address:', error);
       }
     });
   }
@@ -112,18 +116,18 @@ export class ManageComponent implements OnInit {
       })
       return;
     }
-    this.RolesService.update(this.theFormGroup.value).subscribe({
-      next: (Role) => {
-        console.log('Role updated successfully:', Role);
+    this.AddressesService.update(this.theFormGroup.value).subscribe({
+      next: (Address) => {
+        console.log('Address updated successfully:', Address);
         Swal.fire({
           title: 'Actualizado!',
           text: 'Registro actualizado correctamente.',
           icon: 'success',
         })
-        this.router.navigate(['/Roles/list']);
+        this.router.navigate(['/Addresses/list']);
       },
       error: (error) => {
-        console.error('Error updating Role:', error);
+        console.error('Error updating Address:', error);
       }
     });
   }

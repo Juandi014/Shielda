@@ -7,21 +7,25 @@
         <div class="col">
             <div class="card shadow">
                 <div class="card-header bg-transparent">
-                    <h3 class="mb-0">Roles</h3>
+                    <h3 class="mb-0">User-Roles</h3>
                     <button class="btn btn-success" (click)="create()">Crear</button>
                 </div>
                 <div class="card-body">
                     <table class="table">
                         <tr>
                             <td>Id</td>
-                            <td>Ubicación</td>
-                            <td>Capacidad</td>
+                            <td>User</td>
+                            <td>Role</td>
+                            <td>StartAt</td>
+                            <td>EndAt</td>
                             <td>Opciones</td>
                         </tr>
                         <tr *ngFor="let role of roles">
-                            <td>{{role.id}}</td>
-                            <td>{{role.name}}</td>
-                            <td>{{role.description}}</td>
+                            <td>{{UserRole.id}}</td>
+                            <td>{{UserRole.users}}</td>
+                            <td>{{UserRole.roles}}</td>
+                            <td>{{UserRole.startAt | date: 'dd/MM/yyyy'}}</td>
+                            <td>{{UserRole.endAt | date: 'dd/MM/yyyy'}}</td>
                             <td>
                                 <button class="btn btn-warning" (click)="view(role.id)">Ver</button>
                                 <button class="btn btn-primary" (click)="edit(role.id)">Editar</button>
