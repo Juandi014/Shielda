@@ -11,7 +11,8 @@ const routes: Routes = [
   { path: 'update/:id', component: ManageComponent }, // /users/update/123
   { path: 'profile/:id', component: ManageComponent }, // /users/profile/123
   { path: 'address/:id', component: ManageComponent }, // /users/address/123
-  { path: 'edit/:id', component: EditComponent }, // /users/edit/123
+  { path: 'edit/:id', component: EditComponent }, 
+  // /users/edit/123
 ];
 
 @NgModule({

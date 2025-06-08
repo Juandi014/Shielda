@@ -4,5 +4,6 @@ export class User {
     email:string;
     password?:string;
     token?:string;
-    photoUrl?:string; // Asegúrate de que tu modelo User tenga esto
+    photoUrl?:string;
+    phone?: string;// Asegúrate de que tu modelo User tenga esto
 }
