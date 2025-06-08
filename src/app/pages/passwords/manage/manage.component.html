@@ -22,7 +22,7 @@
                             </div>
                             <br>
                             <div class="row">
-                                <div class="col-3">Usuario</div>
+                                <div class="col-3">User</div>
                                 <div class="col-9">
                                     <select class="form-control" formControlName="userId" [disabled]="mode==1">
                                     <option value="">Seleccione un usuario</option>
@@ -54,7 +54,7 @@
                             <div class="row">
                                 <div class="col-3">StartAt</div>
                                 <div class="col-9">
-                                    <input type="date" class="form-control"
+                                    <input type="datetime-local" class="form-control"
                                         [disabled]="mode==1"
                                         [min]="minDate"
                                         formControlName="startAt">
@@ -68,7 +68,7 @@
                             <div class="row">
                                 <div class="col-3">EndAt</div>
                                 <div class="col-9">
-                                    <input type="date" class="form-control"
+                                    <input type="datetime-local" class="form-control"
                                         [disabled]="mode==1"
                                         [min]="getTheFormGroup.startAt.value"
                                         formControlName="endAt">

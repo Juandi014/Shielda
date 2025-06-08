@@ -4,4 +4,5 @@ export class Session {
     expiration?: Date;
     FACode?: string;
     state?: string;
+    userId?: number;
 }

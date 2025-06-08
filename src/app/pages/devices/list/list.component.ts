@@ -36,7 +36,7 @@ export class ListComponent implements OnInit {
     this.router.navigate(['/devices/update/'+id]);
   }
   delete(id:number){
-    console.log("Delete role with id:", id);
+    console.log("Delete device with id:", id);
     Swal.fire({
       title: 'Eliminar',
       text: "Está seguro que quiere eliminar el registro?",

@@ -30,6 +30,17 @@ export class ManageComponent implements OnInit {
     this.configFormGroup()
   }
 
+  formatDate(date: Date): string {
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const seconds = date.getSeconds().toString().padStart(2, '0');
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
+
   ngOnInit(): void {
     const currentUrl = this.activatedRoute.snapshot.url.join('/');
     if (currentUrl.includes('view')) {
@@ -131,7 +142,12 @@ export class ManageComponent implements OnInit {
       })
       return;
     }
-    this.PasswordsService.create(this.theFormGroup.value.userId, this.theFormGroup.value).subscribe({
+
+    const formValue = { ...this.theFormGroup.value };
+    formValue.startAt = this.formatDate(new Date(formValue.startAt));
+    formValue.endAt = this.formatDate(new Date(formValue.endAt));
+
+    this.PasswordsService.create(formValue.userId, formValue).subscribe({
       next: (Password) => {
         console.log('Password created successfully:', Password);
         Swal.fire({
