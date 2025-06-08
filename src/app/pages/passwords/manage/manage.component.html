@@ -1,0 +1,86 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--7">
+    <!-- Table -->
+    <div class="row">
+        <div class="col">
+            <div class="card shadow">
+                <div class="card-header bg-transparent">
+                    <h3 class="mb-0" *ngIf="mode==1">Detalle</h3>
+                    <h3 class="mb-0" *ngIf="mode==2">Crear</h3>
+                    <h3 class="mb-0" *ngIf="mode==3">Actualizar</h3>
+                </div>
+                <div class="card-body">
+                    <form class="form" [formGroup]="theFormGroup">
+                        <div class="card-body container">
+                            <div class="row">
+                                <div class="col-3">ID</div>
+                                <div class="col-9">
+                                    <input type="text" class="form-control" formControlName="id"  disabled>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-3">Content</div>
+                                <div class="col-9">
+                                    <input type="text" class="form-control" 
+                                        [disabled]="mode==1" formControlName="content">
+                                        
+                                    <div
+                                        *ngIf="getTheFormGroup.content.errors && (getTheFormGroup.content.dirty || getTheFormGroup.content.touched || trySend)">
+                                        <strong *ngIf="getTheFormGroup.content?.errors?.required"
+                                            class="msnError">Requerido</strong>
+                                        <strong *ngIf="getTheFormGroup.content?.errors?.minlength"
+                                            class="msnError">Inválido
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-3">StartAt</div>
+                                <div class="col-9">
+                                    <input type="date" class="form-control"
+                                        [disabled]="mode==1"
+                                        [min]="minDate"
+                                        formControlName="startAt">
+                                    <div *ngIf="getTheFormGroup.startAt.errors && (getTheFormGroup.startAt.dirty || getTheFormGroup.startAt.touched || trySend)">
+                                        <strong *ngIf="getTheFormGroup.startAt?.errors?.required" class="msnError">Requerido</strong>
+                                        <strong *ngIf="getTheFormGroup.startAt?.errors?.min" class="msnError">Fecha inválida</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-3">EndAt</div>
+                                <div class="col-9">
+                                    <input type="date" class="form-control"
+                                        [disabled]="mode==1"
+                                        [min]="getTheFormGroup.startAt.value"
+                                        formControlName="endAt">
+                                    <div *ngIf="getTheFormGroup.endAt.errors && (getTheFormGroup.endAt.dirty || getTheFormGroup.endAt.touched || trySend)">
+                                        <strong *ngIf="getTheFormGroup.endAt?.errors?.required" class="msnError">Requerido</strong>
+                                        <strong *ngIf="getTheFormGroup.endAt?.errors?.min" class="msnError">Debe ser igual o después de StartAt</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-3"></div>
+                                <div class="col-9">
+                                    <button type="button" class="btn btn-primary btn-block" (click)="back()"
+                                        *ngIf="mode==1">Regresar</button>
+                                    <button type="button" class="btn btn-success btn-block" (click)="create()"
+                                        *ngIf="mode==2">Crear</button>
+                                    <button type="button" class="btn btn-warning btn-block" (click)="update()"
+                                        *ngIf="mode==3">Actualizar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

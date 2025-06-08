@@ -1,0 +1,40 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--7">
+    <!-- Table -->
+    <div class="row">
+        <div class="col">
+            <div class="card shadow">
+                <div class="card-header bg-transparent">
+                    <h3 class="mb-0">Sessions</h3>
+                    <button class="btn btn-success" (click)="create()">Crear</button>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tr>
+                            <td>Id</td>
+                            <td>Token</td>
+                            <td>Expiration</td>
+                            <td>FACode</td>
+                            <td>State</td>
+                            <td>Opciones</td>
+                        </tr>
+                        <tr *ngFor="let session of sessions">
+                            <td>{{session.id}}</td>
+                            <td>{{session.token}}</td>
+                            <td>{{session.expiration}}</td>
+                            <td>{{session.FACode}}</td>
+                            <td>{{session.state}}</td>
+                            <td>
+                                <button class="btn btn-warning" (click)="view(session.id)">Ver</button>
+                                <button class="btn btn-primary" (click)="edit(session.id)">Editar</button>
+                                <button class="btn btn-danger" (click)="delete(session.id)">Eliminar</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

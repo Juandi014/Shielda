@@ -1,1 +1,132 @@
-<p>manage works!</p>
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8"></div>
+<!-- Page content -->
+<div class="container-fluid mt--7">
+  <!-- Table -->
+  <div class="row">
+    <div class="col">
+      <div class="card shadow">
+        <div class="card-header bg-transparent">
+          <h3 class="mb-0" *ngIf="mode == 1">Detalle</h3>
+          <h3 class="mb-0" *ngIf="mode == 2">Crear</h3>
+          <h3 class="mb-0" *ngIf="mode == 3">Actualizar</h3>
+        </div>
+        <div class="card-body">
+          <form class="form" [formGroup]="theFormGroup">
+            <div class="card-body container">
+              <div class="row">
+                <div class="col-3">ID</div>
+                <div class="col-9">
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="id"
+                    disabled
+                  />
+                </div>
+              </div>
+              <br />
+              <div class="row">
+                <div class="col-3">Url</div>
+                <div class="col-9">
+                  <input
+                    type="text"
+                    class="form-control"
+                    [disabled]="mode == 1"
+                    formControlName="url"
+                  />
+
+                  <div
+                    *ngIf="
+                      getTheFormGroup.url.errors &&
+                      (getTheFormGroup.url.dirty ||
+                        getTheFormGroup.url.touched ||
+                        trySend)
+                    "
+                  >
+                    <strong
+                      *ngIf="getTheFormGroup.url?.errors?.required"
+                      class="msnError"
+                      >Requerido</strong
+                    >
+                    <strong
+                      *ngIf="getTheFormGroup.url?.errors?.minlength"
+                      class="msnError"
+                      >Inválido
+                    </strong>
+                  </div>
+                </div>
+              </div>
+              <br />
+              <div class="row">
+                <div class="col-3">Method</div>
+                <div class="col-9">
+                  <select
+                    class="form-control"
+                    [disabled]="mode == 1"
+                    formControlName="method"
+                  >
+                    <option value="">Seleccione un método</option>
+                    <option value="GET">GET</option>
+                    <option value="POST">POST</option>
+                    <option value="PUT">PUT</option>
+                    <option value="DELETE">DELETE</option>
+                  </select>
+                  <div
+                    *ngIf="
+                      getTheFormGroup.method.errors &&
+                      (getTheFormGroup.method.dirty ||
+                        getTheFormGroup.method.touched ||
+                        trySend)
+                    "
+                  >
+                    <strong
+                      *ngIf="getTheFormGroup.method?.errors?.required"
+                      class="msnError"
+                      >Requerido</strong
+                    >
+                    <strong
+                      *ngIf="getTheFormGroup.method?.errors?.minlength"
+                      class="msnError"
+                      >Inválido
+                    </strong>
+                  </div>
+                </div>
+              </div>
+
+              <br />
+              <div class="row">
+                <div class="col-3"></div>
+                <div class="col-9">
+                  <button
+                    type="button"
+                    class="btn btn-primary btn-block"
+                    (click)="back()"
+                    *ngIf="mode == 1"
+                  >
+                    Regresar
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-success btn-block"
+                    (click)="create()"
+                    *ngIf="mode == 2"
+                  >
+                    Crear
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-warning btn-block"
+                    (click)="update()"
+                    *ngIf="mode == 3"
+                  >
+                    Actualizar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
