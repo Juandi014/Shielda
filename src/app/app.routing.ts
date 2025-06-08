@@ -8,6 +8,11 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
 
 const routes: Routes =[
   {
+  path: 'users',
+  loadChildren: () => import('./pages/users/users.module').then(m => m.UsersModule)
+},
+
+  {
     path: '',
     redirectTo: 'dashboard',
     pathMatch: 'full',
