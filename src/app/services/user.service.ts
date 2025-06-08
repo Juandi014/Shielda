@@ -30,4 +30,10 @@ export class UserService {
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+  view(id: number): Observable<User> {
+  return this.http.get<User>(`${this.apiUrl}/${id}`);
+}
+updateProfile(id: number, data: FormData) {
+  return this.http.put(`${this.apiUrl}/${id}`, data);
+}
 }

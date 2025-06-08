@@ -55,12 +55,27 @@ export class LoginComponent implements OnInit, OnDestroy {
         photoUrl: payload.picture
       };
 
-      localStorage.setItem('sesion', JSON.stringify(userData));
-      this.securityService.setUser(userData);
+     // Paso nuevo: intentar guardar en tabla de usuarios
+fetch('http://127.0.0.1:5000/api/users', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name: userData.name,
+    email: userData.email
+  })
+})
+.finally(() => {
+  // Guardar sesión local y continuar pase lo que pase
+  localStorage.setItem('sesion', JSON.stringify(userData));
+  this.securityService.setUser(userData);
 
-      this.router.navigateByUrl('/dashboard').then(() => {
-        window.location.reload(); // 🔄 fuerza recarga total
-      });
+  this.router.navigateByUrl('/dashboard').then(() => {
+    window.location.reload();
+  });
+});
+
     };
 
     // Inicializar botón de Google

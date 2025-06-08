@@ -17,26 +17,32 @@ export class ListComponent implements OnInit {
   ngOnInit(): void {
     this.list();
   }
-  createUser(): void {
-    this.router.navigate(['/users/create']);
-  }
+
   list(): void {
     this.userService.list().subscribe(users => this.users = users);
+  }
+
+  createUser(): void {
+    this.router.navigate(['/users/create']);
   }
 
   create(): void {
     this.router.navigate(['/register']);
   }
 
-  view(id: number) {
+  view(id: number): void {
     this.router.navigate(['/users/view', id]);
   }
 
-  update(id: number) {
-    this.router.navigate(['/users/update', id]);
-  }
+ profile(id: number) {
+  this.router.navigate(['/profile', id]);
+}
 
-  delete(id: number) {
+  update(id: number) {
+  this.router.navigate(['/profile/update', id]);
+}
+
+  delete(id: number): void {
     Swal.fire({
       title: '¿Eliminar usuario?',
       text: "Esta acción no se puede deshacer",
