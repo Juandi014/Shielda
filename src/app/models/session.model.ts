@@ -1,5 +1,5 @@
 export class Session {
-    id?: string;
+    id?: number;
     token?: string;
     expiration?: Date;
     FACode?: string;

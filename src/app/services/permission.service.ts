@@ -10,21 +10,21 @@ import { environment } from 'src/environments/environment';
 export class PermissionService {
   constructor(private http: HttpClient) { }
   list(): Observable<Permission[]> {
-    return this.http.get<Permission[]>(`${environment.url_ms_cinema}/theaters`);
+    return this.http.get<Permission[]>(`${environment.url_ms_cinema}/api/permissions`);
   }
   view(id: number): Observable<Permission> {
-    return this.http.get<Permission>(`${environment.url_ms_cinema}/theaters/${id}`);
+    return this.http.get<Permission>(`${environment.url_ms_cinema}/api/permissions/${id}`);
   }
   create(newPermission: Permission): Observable<Permission> {
     delete newPermission.id;
-    return this.http.post<Permission>(`${environment.url_ms_cinema}/theaters`, newPermission);
+    return this.http.post<Permission>(`${environment.url_ms_cinema}/api/permissions`, newPermission);
   }
   update(thePermission: Permission): Observable<Permission> {
-    return this.http.put<Permission>(`${environment.url_ms_cinema}/theaters/${thePermission.id}`, thePermission);
+    return this.http.put<Permission>(`${environment.url_ms_cinema}/api/permissions/${thePermission.id}`, thePermission);
   }
 
   delete(id: number) {
-    return this.http.delete<Permission>(`${environment.url_ms_cinema}/theaters/${id}`);
+    return this.http.delete<Permission>(`${environment.url_ms_cinema}/api/permissions/${id}`);
   }
 
 }

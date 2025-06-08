@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Role } from 'src/app/models/role.model';
-import { UserRole } from 'src/app/models/user-role.model';
-import { User } from 'src/app/models/user.model';
-import { UserRoleService } from 'src/app/services/user-role.service';
+import { Password } from 'src/app/models/password.model';
+import { PasswordService } from 'src/app/services/password.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -12,12 +10,8 @@ import Swal from 'sweetalert2';
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit {
-  userRoles: UserRole[] = [];
-  roles: Role[] = [];
-  users: User[] = [];
-  roleService: any;
-  UserRolesService: any;
-  constructor(private userRolesService:UserRoleService,
+  passwords: Password[] = [];
+  constructor(private passwordsService:PasswordService,
     private router:Router
   ) { }
 
@@ -25,36 +19,24 @@ export class ListComponent implements OnInit {
     this.list();
   }
 
-  loadUsers() {
-    this.UserRolesService.getUsers().subscribe(users => {
-      this.users = users;
-    });
-  }
-
-  loadRoles() {
-    this.UserRolesService.getRoles().subscribe(roles => {
-      this.roles = roles;
-    });
-  }
-
   list(){
-    this.userRolesService.list().subscribe({
-      next: (userRoles) => {
-        this.userRoles = userRoles;
+    this.passwordsService.list().subscribe({
+      next: (passwords) => {
+        this.passwords = passwords;
       }
     });
   }
   create(){
-    this.router.navigate(['/user-roles/create']);
+    this.router.navigate(['/passwords/create']);
   }
   view(id:number){
-    this.router.navigate(['/user-roles/view/'+id]);
+    this.router.navigate(['/passwords/view/'+id]);
   }
   edit(id:number){
-    this.router.navigate(['/user-roles/update/'+id]);
+    this.router.navigate(['/passwords/update/'+id]);
   }
   delete(id:number){
-    console.log("Delete user-role with id:", id);
+    console.log("Delete role with id:", id);
     Swal.fire({
       title: 'Eliminar',
       text: "Está seguro que quiere eliminar el registro?",
@@ -66,7 +48,7 @@ export class ListComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.userRolesService.delete(id).
+        this.passwordsService.delete(id).
           subscribe(data => {
             Swal.fire(
               'Eliminado!',

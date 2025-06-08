@@ -19,10 +19,51 @@ export const AdminLayoutRoutes: Routes = [
                 path: '',
                 loadChildren: () => import('src/app/pages/roles/roles.module').then(m => m.RolesModule)
             },
+        ]
+    },
+    {
+        path: 'addresses',
+        children: [
+            {
+                path: '',
+                loadChildren: () => import('src/app/pages/addresses/addresses.module').then(m => m.AddressesModule)
+            },
+        ]
+    },
+    {
+        path: 'user-roles',
+        children: [
             {
                 path: '',
                 loadChildren: () => import('src/app/pages/user-role/user-role.module').then(m => m.UserRoleModule)
-            }
+            },
+        ]
+    },
+    {
+        path: 'permissions',
+        children: [
+            {
+                path: '',
+                loadChildren: () => import('src/app/pages/permissions/permissions.module').then(m => m.PermissionsModule)
+            },
+        ]
+    },
+    {
+        path: 'passwords',
+        children: [
+            {
+                path: '',
+                loadChildren: () => import('src/app/pages/passwords/passwords.module').then(m => m.PasswordsModule)
+            },
+        ]
+    },
+    {
+        path: 'sessions',
+        children: [
+            {
+                path: '',
+                loadChildren: () => import('src/app/pages/sessions/sessions.module').then(m => m.SessionsModule)
+            },
         ]
     }
 ];

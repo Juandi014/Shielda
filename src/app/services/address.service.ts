@@ -10,21 +10,21 @@ import { environment } from 'src/environments/environment';
 export class AddressService {
   constructor(private http: HttpClient) { }
   list(): Observable<Address[]> {
-    return this.http.get<Address[]>(`${environment.url_ms_cinema}/theaters`);
+    return this.http.get<Address[]>(`${environment.url_ms_cinema}/api/addresses`);
   }
   view(id: number): Observable<Address> {
-    return this.http.get<Address>(`${environment.url_ms_cinema}/theaters/${id}`);
+    return this.http.get<Address>(`${environment.url_ms_cinema}/api/addresses/user/${id}`);
   }
-  create(newAddress: Address): Observable<Address> {
+  create(userId: number, newAddress: Address): Observable<Address> {
     delete newAddress.id;
-    return this.http.post<Address>(`${environment.url_ms_cinema}/theaters`, newAddress);
+    return this.http.post<Address>(`${environment.url_ms_cinema}/api/addresses/user/${userId}`, newAddress);
   }
   update(theAddress: Address): Observable<Address> {
-    return this.http.put<Address>(`${environment.url_ms_cinema}/theaters/${theAddress.id}`, theAddress);
+    return this.http.put<Address>(`${environment.url_ms_cinema}/api/addresses/${theAddress.id}`, theAddress);
   }
 
   delete(id: number) {
-    return this.http.delete<Address>(`${environment.url_ms_cinema}/theaters/${id}`);
+    return this.http.delete<Address>(`${environment.url_ms_cinema}/api/addresses/${id}`);
   }
 
 }

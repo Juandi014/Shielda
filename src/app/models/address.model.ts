@@ -4,4 +4,5 @@ export class Address {
   number?: string;
   latitude?: number;
   longitude?: number;
+  userId?: number;
 }

@@ -3,4 +3,5 @@ export class Password {
     content?: string;
     startAt?: Date;
     endAt?: Date;
+    userId?: number;
 }
