@@ -7,7 +7,7 @@
         <div class="col">
             <div class="card shadow">
                 <div class="card-header bg-transparent">
-                    <h3 class="mb-0">Roles</h3>
+                    <h3 class="mb-0">Devices</h3>
                     <button class="btn btn-success" (click)="create()">Crear</button>
                 </div>
                 <div class="card-body">
@@ -15,17 +15,19 @@
                         <tr>
                             <td>Id</td>
                             <td>Name</td>
-                            <td>Description</td>
+                            <td>IP</td>
+                            <td>Operating System</td>
                             <td>Opciones</td>
                         </tr>
-                        <tr *ngFor="let role of roles">
-                            <td>{{role.id}}</td>
-                            <td>{{role.name}}</td>
-                            <td>{{role.description}}</td>
+                        <tr *ngFor="let device of devices">
+                            <td>{{device.id}}</td>
+                            <td>{{device.name}}</td>
+                            <td>{{device.ip}}</td>
+                            <td>{{device.operatingSystem}}</td>
                             <td>
-                                <button class="btn btn-warning" (click)="view(role.id)">Ver</button>
-                                <button class="btn btn-primary" (click)="edit(role.id)">Editar</button>
-                                <button class="btn btn-danger" (click)="delete(role.id)">Eliminar</button>
+                                <button class="btn btn-warning" (click)="view(device.id)">Ver</button>
+                                <button class="btn btn-primary" (click)="edit(device.id)">Editar</button>
+                                <button class="btn btn-danger" (click)="delete(device.id)">Eliminar</button>
                             </td>
                         </tr>
                     </table>

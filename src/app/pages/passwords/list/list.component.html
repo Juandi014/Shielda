@@ -20,11 +20,11 @@
                             <td>Opciones</td>
                         </tr>
                         <tr *ngFor="let password of passwords">
-                            <td>{{Password.id}}</td>
-                            <td>{{Password.users}}</td>
-                            <td>{{Password.roles}}</td>
-                            <td>{{Password.startAt | date: 'dd/MM/yyyy'}}</td>
-                            <td>{{Password.endAt | date: 'dd/MM/yyyy'}}</td>
+                            <td>{{password.id}}</td>
+                            <td>{{password.users}}</td>
+                            <td>{{password.roles}}</td>
+                            <td>{{password.startAt | date: 'dd/MM/yyyy'}}</td>
+                            <td>{{password.endAt | date: 'dd/MM/yyyy'}}</td>
                             <td>
                                 <button class="btn btn-warning" (click)="view(password.id)">Ver</button>
                                 <button class="btn btn-primary" (click)="edit(password.id)">Editar</button>

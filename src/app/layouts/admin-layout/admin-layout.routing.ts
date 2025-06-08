@@ -71,5 +71,23 @@ export const AdminLayoutRoutes: Routes = [
                 loadChildren: () => import('src/app/pages/sessions/sessions.module').then(m => m.SessionsModule)
             },
         ]
+    },
+    {
+        path: 'security-questions',
+        children: [
+            {
+                path: '',
+                loadChildren: () => import('src/app/pages/security-questions/security-questions.module').then(m => m.SecurityQuestionsModule)
+            },
+        ]
+    },
+    {
+        path: 'devices',
+        children: [
+            {
+                path: '',
+                loadChildren: () => import('src/app/pages/devices/devices.module').then(m => m.DevicesModule)
+            },
+        ]
     }
 ];

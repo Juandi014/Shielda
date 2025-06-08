@@ -3,4 +3,5 @@ export class Device {
     name?: string;
     ip?: string;
     operatingSystem?: string;
+    userId? : number;
 }

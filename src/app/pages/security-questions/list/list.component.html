@@ -7,7 +7,7 @@
         <div class="col">
             <div class="card shadow">
                 <div class="card-header bg-transparent">
-                    <h3 class="mb-0">Roles</h3>
+                    <h3 class="mb-0">Security Questions</h3>
                     <button class="btn btn-success" (click)="create()">Crear</button>
                 </div>
                 <div class="card-body">
@@ -18,14 +18,14 @@
                             <td>Description</td>
                             <td>Opciones</td>
                         </tr>
-                        <tr *ngFor="let role of roles">
-                            <td>{{role.id}}</td>
-                            <td>{{role.name}}</td>
-                            <td>{{role.description}}</td>
+                        <tr *ngFor="let securityQuestion of securityQuestions">
+                            <td>{{securityQuestion.id}}</td>
+                            <td>{{securityQuestion.name}}</td>
+                            <td>{{securityQuestion.description}}</td>
                             <td>
-                                <button class="btn btn-warning" (click)="view(role.id)">Ver</button>
-                                <button class="btn btn-primary" (click)="edit(role.id)">Editar</button>
-                                <button class="btn btn-danger" (click)="delete(role.id)">Eliminar</button>
+                                <button class="btn btn-warning" (click)="view(securityQuestion.id)">Ver</button>
+                                <button class="btn btn-primary" (click)="edit(securityQuestion.id)">Editar</button>
+                                <button class="btn btn-danger" (click)="delete(securityQuestion.id)">Eliminar</button>
                             </td>
                         </tr>
                     </table>

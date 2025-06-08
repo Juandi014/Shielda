@@ -72,7 +72,7 @@ export class ManageComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    this.UsersService.view(userId).subscribe({
+    this.UsersService.getById(userId).subscribe({
       next: (user) => {
         // Inicializa el form con userId y userName
         this.theFormGroup.patchValue({

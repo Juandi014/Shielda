@@ -13,7 +13,7 @@ export class PasswordService {
     return this.http.get<Password[]>(`${environment.url_ms_cinema}/api/passwords`);
   }
   view(id: number): Observable<Password> {
-    return this.http.get<Password>(`${environment.url_ms_cinema}/api/passwords/user/${id}`);
+    return this.http.get<Password>(`${environment.url_ms_cinema}/api/passwords/${id}`);
   }
   create(userId: number, newPassword: Password): Observable<Password> {
     delete newPassword.id;

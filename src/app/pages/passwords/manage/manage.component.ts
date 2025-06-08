@@ -17,6 +17,7 @@ export class ManageComponent implements OnInit {
   theFormGroup: FormGroup; // Policía de formulario
   trySend: boolean;
   userId: number = 0; // Asignar un valor por defecto
+  users: any[] = []; // Lista de usuarios
   minDate: string; // Para el campo de fecha, si es necesario
   constructor(private activatedRoute: ActivatedRoute,
     private PasswordsService: PasswordService,
@@ -38,11 +39,21 @@ export class ManageComponent implements OnInit {
     } else if (currentUrl.includes('update')) {
       this.mode = 3;
     }
-    if (this.activatedRoute.snapshot.params.id) {
-      this.Password.id = this.activatedRoute.snapshot.params.id
-      this.getPassword(this.Password.id)
-      this.minDate = new Date().toISOString().split('T')[0];
-    }
+
+    // cargar los usuarios
+        this.UsersService.list().subscribe({
+          next: (data) => {
+            this.users = data;
+          },
+          error: () => {
+            Swal.fire("Error", "No se pudieron cargar los usuarios", "error");
+          },
+        });
+    
+        if (this.activatedRoute.snapshot.params.id) {
+          this.Password.id = this.activatedRoute.snapshot.params.id;
+          this.getPassword(this.Password.id);
+        }
 
   }
   loadUserAndInitForm() {
@@ -55,7 +66,7 @@ export class ManageComponent implements OnInit {
         return;
       }
   
-      this.UsersService.view(userId).subscribe({
+      this.UsersService.getById(userId).subscribe({
         next: (user) => {
           // Inicializa el form con userId y userName
           this.theFormGroup.patchValue({
@@ -78,6 +89,7 @@ export class ManageComponent implements OnInit {
       content: ['', [Validators.required, Validators.minLength(2)]],
       startAt: [null, Validators.required],
       endAt: [null, Validators.required],
+      userId: [null, [Validators.required]],
     })
   }
 
@@ -96,8 +108,6 @@ export class ManageComponent implements OnInit {
           content: this.Password.content,
           startAt: this.Password.startAt ? new Date(this.Password.startAt) : null,
           endAt: this.Password.endAt ? new Date(this.Password.endAt) : null,
-          userId: [0, [Validators.required]],  // oculto en el formulario, pero enviado al backend
-          userName: [{ value: "", disabled: true }],  // solo lectura
         });
         
         console.log('Password fetched successfully:', this.Password);
@@ -121,7 +131,7 @@ export class ManageComponent implements OnInit {
       })
       return;
     }
-    this.PasswordsService.create(this.userId, this.theFormGroup.value).subscribe({
+    this.PasswordsService.create(this.theFormGroup.value.userId, this.theFormGroup.value).subscribe({
       next: (Password) => {
         console.log('Password created successfully:', Password);
         Swal.fire({
