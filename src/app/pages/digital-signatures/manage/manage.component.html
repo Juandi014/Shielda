@@ -26,7 +26,7 @@
                                 <div class="col-9">
                                     <select class="form-control" formControlName="userId" [disabled]="mode==1">
                                     <option value="">Seleccione un usuario</option>
-                                    <option *ngFor="let user of users" [value]="user.id">{{ user.name }}</option>
+                                    <option *ngFor="let user of users" [value]="user.id">{{ user.photo }}</option>
                                     </select>
                                     <div *ngIf="getTheFormGroup.userId.errors && (getTheFormGroup.userId.dirty || getTheFormGroup.userId.touched || trySend)">
                                     <strong *ngIf="getTheFormGroup.userId?.errors?.required" class="msnError">Requerido</strong>
@@ -35,29 +35,13 @@
                             </div>
                             <br>
                             <div class="row">
-                                <div class="col-3">Security Question</div>
+                                <div class="col-3">Photo</div>
                                 <div class="col-9">
-                                    <select class="form-control" formControlName="questionId" [disabled]="mode==1">
-                                    <option value="">Seleccione un usuario</option>
-                                    <option *ngFor="let question of questions" [value]="question.id">{{ question.name }}</option>
-                                    </select>
-                                    <div *ngIf="getTheFormGroup.questionId.errors && (getTheFormGroup.questionId.dirty || getTheFormGroup.questionId.touched || trySend)">
-                                    <strong *ngIf="getTheFormGroup.questionId?.errors?.required" class="msnError">Requerido</strong>
-                                    </div>
-                                </div>
-                            </div>
-                            <br>
-                            <div class="row">
-                                <div class="col-3">Content</div>
-                                <div class="col-9">
-                                    <input type="text" class="form-control" 
-                                        [disabled]="mode==1" formControlName="content">
-                                    <div *ngIf="getTheFormGroup.content.errors && (getTheFormGroup.content.dirty || getTheFormGroup.content.touched || trySend)">
-                                        <strong *ngIf="getTheFormGroup.content?.errors?.required"
-                                            class="msnError">Requerido</strong>
-                                        <strong *ngIf="getTheFormGroup.content?.errors?.minlength"
-                                            class="msnError">Inválido
-                                        </strong>
+                                    <input type="file" class="form-control"
+                                        [disabled]="mode==1"
+                                        (change)="onFileChange($event)">
+                                    <div *ngIf="getTheFormGroup.photo.errors && trySend">
+                                    <strong *ngIf="getTheFormGroup.photo?.errors?.required" class="msnError">Requerido</strong>
                                     </div>
                                 </div>
                             </div>

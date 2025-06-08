@@ -1,6 +1,6 @@
 export class Answer {
   id?: number;
-  securityQuestionId?: number;
+  questionId?: number;
   userId?: number;
   content?: string;
     

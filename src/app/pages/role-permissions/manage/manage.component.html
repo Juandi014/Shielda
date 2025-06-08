@@ -1,0 +1,95 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--7">
+    <!-- Table -->
+    <div class="row">
+        <div class="col">
+            <div class="card shadow">
+                <div class="card-header bg-transparent">
+                    <h3 class="mb-0" *ngIf="mode==1">Detalle</h3>
+                    <h3 class="mb-0" *ngIf="mode==2">Crear</h3>
+                    <h3 class="mb-0" *ngIf="mode==3">Actualizar</h3>
+                </div>
+                <div class="card-body">
+                    <form class="form" [formGroup]="theFormGroup">
+                        <div class="card-body container">
+                            <div class="row">
+                                <div class="col-3">ID</div>
+                                <div class="col-9">
+                                    <input type="text" class="form-control" formControlName="id"  disabled>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-3">Role</div>
+                                <div class="col-9">
+                                    <select class="form-control" formControlName="roleId" [disabled]="mode==1">
+                                    <option value="">Seleccione un usuario</option>
+                                    <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
+                                    </select>
+                                    <div *ngIf="getTheFormGroup.roleId.errors && (getTheFormGroup.roleId.dirty || getTheFormGroup.roleId.touched || trySend)">
+                                    <strong *ngIf="getTheFormGroup.roleId?.errors?.required" class="msnError">Requerido</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-3">Permission</div>
+                                <div class="col-9">
+                                    <select class="form-control" formControlName="permissionId" [disabled]="mode==1">
+                                    <option value="">Seleccione un usuario</option>
+                                    <option *ngFor="let permission of permissions" [value]="permission.id">{{ permission.method }}</option>
+                                    </select>
+                                    <div *ngIf="getTheFormGroup.permissionId.errors && (getTheFormGroup.permissionId.dirty || getTheFormGroup.permissionId.touched || trySend)">
+                                    <strong *ngIf="getTheFormGroup.permissionId?.errors?.required" class="msnError">Requerido</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-3">StartAt</div>
+                                <div class="col-9">
+                                    <input type="datetime-local" class="form-control"
+                                        [disabled]="mode==1"
+                                        [min]="minDate"
+                                        formControlName="startAt">
+                                    <div *ngIf="getTheFormGroup.startAt.errors && (getTheFormGroup.startAt.dirty || getTheFormGroup.startAt.touched || trySend)">
+                                        <strong *ngIf="getTheFormGroup.startAt?.errors?.required" class="msnError">Requerido</strong>
+                                        <strong *ngIf="getTheFormGroup.startAt?.errors?.min" class="msnError">Fecha inválida</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-3">EndAt</div>
+                                <div class="col-9">
+                                    <input type="datetime-local" class="form-control"
+                                        [disabled]="mode==1"
+                                        [min]="getTheFormGroup.startAt.value"
+                                        formControlName="endAt">
+                                    <div *ngIf="getTheFormGroup.endAt.errors && (getTheFormGroup.endAt.dirty || getTheFormGroup.endAt.touched || trySend)">
+                                        <strong *ngIf="getTheFormGroup.endAt?.errors?.required" class="msnError">Requerido</strong>
+                                        <strong *ngIf="getTheFormGroup.endAt?.errors?.min" class="msnError">Debe ser igual o después de StartAt</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-3"></div>
+                                <div class="col-9">
+                                    <button type="button" class="btn btn-primary btn-block" (click)="back()"
+                                        *ngIf="mode==1">Regresar</button>
+                                    <button type="button" class="btn btn-success btn-block" (click)="create()"
+                                        *ngIf="mode==2">Crear</button>
+                                    <button type="button" class="btn btn-warning btn-block" (click)="update()"
+                                        *ngIf="mode==3">Actualizar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

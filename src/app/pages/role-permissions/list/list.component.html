@@ -7,23 +7,23 @@
         <div class="col">
             <div class="card shadow">
                 <div class="card-header bg-transparent">
-                    <h3 class="mb-0">Answers</h3>
+                    <h3 class="mb-0">Role Permissions</h3>
                     <button class="btn btn-success" (click)="create()">Crear</button>
                 </div>
                 <div class="card-body">
                     <table class="table">
                         <tr>
                             <td>Id</td>
-                            <td>Content</td>
-                            <td>Opciones</td>
+                            <td>startAt</td>
+                            <td>endAt</td>
                         </tr>
-                        <tr *ngFor="let answer of answers">
-                            <td>{{answer.id}}</td>
-                            <td>{{answer.content}}</td>
+                        <tr *ngFor="let rolePermission of rolePermissions">
+                            <td>{{rolePermission.id}}</td>
+                            <td>{{rolePermission.content}}</td>
                             <td>
-                                <button class="btn btn-warning" (click)="view(answer.id)">Ver</button>
-                                <button class="btn btn-primary" (click)="edit(answer.id)">Editar</button>
-                                <button class="btn btn-danger" (click)="delete(answer.id)">Eliminar</button>
+                                <button class="btn btn-warning" (click)="view(rolePermission.id)">Ver</button>
+                                <button class="btn btn-primary" (click)="edit(rolePermission.id)">Editar</button>
+                                <button class="btn btn-danger" (click)="delete(rolePermission.id)">Eliminar</button>
                             </td>
                         </tr>
                     </table>

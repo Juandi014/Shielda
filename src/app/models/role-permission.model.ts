@@ -1,5 +1,7 @@
 export class RolePermission {
-    id?: string;
+    id?: number;
     startAt?: Date;
     endAt?: Date;
+    roleId?: number;
+    permissionId?: number;
 }

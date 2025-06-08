@@ -7,23 +7,23 @@
         <div class="col">
             <div class="card shadow">
                 <div class="card-header bg-transparent">
-                    <h3 class="mb-0">Answers</h3>
+                    <h3 class="mb-0">Digital Signatures</h3>
                     <button class="btn btn-success" (click)="create()">Crear</button>
                 </div>
                 <div class="card-body">
                     <table class="table">
                         <tr>
                             <td>Id</td>
-                            <td>Content</td>
+                            <td>Photo</td>
                             <td>Opciones</td>
                         </tr>
-                        <tr *ngFor="let answer of answers">
-                            <td>{{answer.id}}</td>
-                            <td>{{answer.content}}</td>
+                        <tr *ngFor="let digitalSignature of digitalSignatures">
+                            <td>{{digitalSignature.id}}</td>
+                            <td>{{digitalSignature.photo}}</td>
                             <td>
-                                <button class="btn btn-warning" (click)="view(answer.id)">Ver</button>
-                                <button class="btn btn-primary" (click)="edit(answer.id)">Editar</button>
-                                <button class="btn btn-danger" (click)="delete(answer.id)">Eliminar</button>
+                                <button class="btn btn-warning" (click)="view(digitalSignature.id)">Ver</button>
+                                <button class="btn btn-primary" (click)="edit(digitalSignature.id)">Editar</button>
+                                <button class="btn btn-danger" (click)="delete(digitalSignature.id)">Eliminar</button>
                             </td>
                         </tr>
                     </table>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Answer } from 'src/app/models/answer.model';
-import { AnswerService } from 'src/app/services/answer.service';
+import { DigitalSignature } from 'src/app/models/digital-signature.model';
+import { DigitalSignatureService } from 'src/app/services/digital-signature.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -10,8 +10,8 @@ import Swal from 'sweetalert2';
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit {
-  answers: Answer[] = [];
-  constructor(private answersService:AnswerService,
+  digitalSignatures: DigitalSignature[] = [];
+  constructor(private digitalSignaturesService:DigitalSignatureService,
     private router:Router
   ) { }
 
@@ -20,23 +20,23 @@ export class ListComponent implements OnInit {
   }
 
   list(){
-    this.answersService.list().subscribe({
-      next: (answers) => {
-        this.answers = answers;
+    this.digitalSignaturesService.list().subscribe({
+      next: (digitalSignatures) => {
+        this.digitalSignatures = digitalSignatures;
       }
     });
   }
   create(){
-    this.router.navigate(['/answers/create']);
+    this.router.navigate(['/digital-signatures/create']);
   }
   view(id:number){
-    this.router.navigate(['/answers/view/'+id]);
+    this.router.navigate(['/digital-signatures/view/'+id]);
   }
   edit(id:number){
-    this.router.navigate(['/answers/update/'+id]);
+    this.router.navigate(['/digital-signatures/update/'+id]);
   }
   delete(id:number){
-    console.log("Delete answer with id:", id);
+    console.log("Delete device with id:", id);
     Swal.fire({
       title: 'Eliminar',
       text: "Está seguro que quiere eliminar el registro?",
@@ -48,7 +48,7 @@ export class ListComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.answersService.delete(id).
+        this.digitalSignaturesService.delete(id).
           subscribe(data => {
             Swal.fire(
               'Eliminado!',
