@@ -1,0 +1,15 @@
+<h2>Editar Usuario</h2>
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+  <div class="form-group">
+    <label for="name">Nombre</label>
+    <input id="name" class="form-control" formControlName="name">
+  </div>
+
+  <div class="form-group">
+    <label for="email">Email</label>
+    <input id="email" class="form-control" formControlName="email">
+  </div>
+
+  <button class="btn btn-primary" type="submit">Guardar Cambios</button>
+  <a class="btn btn-secondary" [routerLink]="['/users/view', userId]">Cancelar</a>
+</form>

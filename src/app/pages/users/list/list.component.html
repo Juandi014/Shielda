@@ -1,0 +1,42 @@
+<div class="container-fluid mt--7">
+  <div class="row">
+    <div class="col">
+      <div class="card shadow">
+        <div class="card-header bg-transparent">
+          <h3 class="mb-0">Usuarios</h3>
+          <button class="btn btn-success" (click)="create()">Crear Usuario</button>
+        </div>
+        <div class="card-body">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of users">
+                <td>{{ user.id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                  <button class="btn btn-info btn-sm" (click)="view(user.id)">View</button>
+                  <button class="btn btn-primary btn-sm" (click)="update(user.id)">Update</button>
+                  <button class="btn btn-danger btn-sm" (click)="delete(user.id)">Delete</button>
+                  <button class="btn btn-secondary btn-sm" [routerLink]="['/users/profile', user.id]">Profile</button>
+                  <button class="btn btn-secondary btn-sm" [routerLink]="['/users/address', user.id]">Address</button>
+                  <button class="btn btn-secondary btn-sm" [routerLink]="['/users/signature', user.id]">DigitalSignature</button>
+                  <button class="btn btn-secondary btn-sm" [routerLink]="['/users/devices', user.id]">Devices</button>
+                  <button class="btn btn-secondary btn-sm" [routerLink]="['/users/passwords', user.id]">Passwords</button>
+                  <button class="btn btn-secondary btn-sm" [routerLink]="['/users/sessions', user.id]">Sessions</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
