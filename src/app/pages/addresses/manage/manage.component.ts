@@ -15,46 +15,52 @@ import * as L from "leaflet";
 export class ManageComponent implements OnInit, AfterViewInit {
   map!: L.Map;
   marker!: L.Marker;
-  mode: number; // 1: view, 2: create, 3: update
+  mode: number = 2; // 1: view, 2: create, 3: update
   Address: Address;
-  theFormGroup: FormGroup; // Policía de formulario
-  trySend: boolean;
+  theFormGroup: FormGroup;
+  trySend: boolean = false;
   userId: number = 0;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private AddressesService: AddressService,
     private UsersService: UserService,
     private router: Router,
-    private theFormBuilder: FormBuilder //Definir las reglas
+    private theFormBuilder: FormBuilder
   ) {
-    this.trySend = false;
     this.Address = { id: 0 };
     this.configFormGroup();
   }
 
   ngOnInit(): void {
-    const currentUrl = this.activatedRoute.snapshot.url.join("/");
-    if (currentUrl.includes("view")) {
-      this.mode = 1;
-    } else if (currentUrl.includes("create")) {
+    this.userId = +this.activatedRoute.snapshot.params['userId'];
+this.AddressesService.getByUserId(this.userId).subscribe({
+  next: (address) => {
+    this.mode = 3; // Ya tiene dirección, modo edición
+    this.Address = address;
+    this.theFormGroup.patchValue(address);
+    setTimeout(() => this.initMap(), 0);
+  },
+  error: (err) => {
+    if (err.status === 404) {
+      // No tiene dirección aún => modo creación
       this.mode = 2;
-    } else if (currentUrl.includes("update")) {
-      this.mode = 3;
+      this.loadUserAndInitForm();
+      setTimeout(() => this.initMap(), 0);
+    } else {
+      Swal.fire("Error", "No se pudo cargar la dirección del usuario", "error");
+      this.router.navigate(['/users']);
     }
+  }
+});
 
-    this.userId = +this.activatedRoute.snapshot.params['userId'] || 0;
 
-    if (this.mode === 2) {
-      this.loadUserAndInitForm(); // cargar info del usuario
-    }
-    if (this.activatedRoute.snapshot.params.id) {
-      this.Address.id = this.activatedRoute.snapshot.params.id;
-      this.getAddress(this.Address.id);
-    }
+    // Geocodificación automática al escribir calle y número
+    this.theFormGroup.get('street')?.valueChanges.subscribe(() => this.tryGeocode());
+    this.theFormGroup.get('number')?.valueChanges.subscribe(() => this.tryGeocode());
   }
 
   ngAfterViewInit(): void {
-    // Solo inicializa el mapa si ya tienes latitud y longitud cargadas
     const lat = this.theFormGroup.get("latitude")?.value;
     const lon = this.theFormGroup.get("longitude")?.value;
     if (lat && lon && (lat !== 0 || lon !== 0)) {
@@ -63,9 +69,7 @@ export class ManageComponent implements OnInit, AfterViewInit {
   }
 
   loadUserAndInitForm() {
-    // Ejemplo: obtén el userId desde parámetros (o desde un servicio Auth)
-    const userId = +this.activatedRoute.snapshot.params.userId || 0;
-
+    const userId = this.userId;
     if (!userId) {
       Swal.fire("Error", "No se encontró el usuario para asignar dirección", "error");
       this.router.navigate(["/users/list"]);
@@ -74,11 +78,9 @@ export class ManageComponent implements OnInit, AfterViewInit {
 
     this.UsersService.view(userId).subscribe({
       next: (user) => {
-        // Inicializa el form con userId y userName
         this.theFormGroup.patchValue({
           userId: user.id,
-          userName: user.name,
-          // los otros campos vacíos o con valores por defecto
+          userName: user.name
         });
       },
       error: () => {
@@ -90,15 +92,13 @@ export class ManageComponent implements OnInit, AfterViewInit {
 
   configFormGroup() {
     this.theFormGroup = this.theFormBuilder.group({
-      // primer elemento del vector, valor por defecto
-      // lista, serán las reglas
       id: [0, []],
       street: ["", [Validators.required, Validators.minLength(2)]],
-      number: ["", [Validators.required, Validators.minLength(2)]],
+      number: ["", [Validators.required, Validators.minLength(1)]],
       latitude: [0, []],
       longitude: [0, []],
-      userId: [0, [Validators.required]],  // oculto en el formulario, pero enviado al backend
-      userName: [{ value: "", disabled: true }],  // solo lectura
+      userId: [0, [Validators.required]],
+      userName: [{ value: "", disabled: true }],
     });
   }
 
@@ -106,75 +106,33 @@ export class ManageComponent implements OnInit, AfterViewInit {
     return this.theFormGroup.controls;
   }
 
-  getAddress(id: number) {
-  this.AddressesService.view(id).subscribe({
-    next: (response) => {
-      this.Address = response;
-      this.theFormGroup.patchValue({
-        id: this.Address.id,
-        street: this.Address.street,
-        number: this.Address.number,
-        latitude: this.Address.latitude,
-        longitude: this.Address.longitude,
-      });
-
-      // Inicializa el mapa después de recibir datos válidos
-      const { latitude, longitude } = this.Address;
-      if (latitude && longitude && (latitude !== 0 || longitude !== 0)) {
-        setTimeout(() => this.initMap(), 0); // espera al DOM
-      }
-    },
-    error: (error) => {
-      console.error("Error fetching Address:", error);
-    },
-  });
-}
-
-
   create() {
     this.trySend = true;
     if (this.theFormGroup.invalid) {
-      Swal.fire({
-        title: "Error!",
-        text: "Por favor, complete todos los campos requeridos.",
-        icon: "error",
-      });
+      Swal.fire("Error!", "Por favor, complete todos los campos requeridos.", "error");
       return;
     }
     this.AddressesService.create(this.userId, this.theFormGroup.value).subscribe({
-      next: (Address) => {
-        console.log("Address created successfully:", Address);
-        Swal.fire({
-          title: "Creado!",
-          text: "Registro creado correctamente.",
-          icon: "success",
-        });
-        this.router.navigate(["/Addresses/list"]);
+      next: (address) => {
+        Swal.fire("Creado!", "Registro creado correctamente.", "success");
+        this.router.navigate(["/addresses/list"]);
       },
       error: (error) => {
         console.error("Error creating Address:", error);
       },
     });
   }
+
   update() {
     this.trySend = true;
     if (this.theFormGroup.invalid) {
-      Swal.fire({
-        title: "Error!",
-        text: "Por favor, complete todos los campos requeridos.",
-        icon: "error",
-      });
+      Swal.fire("Error!", "Por favor, complete todos los campos requeridos.", "error");
       return;
     }
     this.AddressesService.update(this.theFormGroup.value).subscribe({
-      next: (Address) => {
-        console.log("Address updated successfully:", Address);
-        Swal.fire({
-          title: "Actualizado!",
-          text: "Registro actualizado correctamente.",
-          icon: "success",
-        });
-        this.router.navigate(["/Addresses/list"]);
+      next: () => {
+        Swal.fire("Actualizado!", "Registro actualizado correctamente.", "success");
+        this.router.navigate(["/addresses/list"]);
       },
       error: (error) => {
         console.error("Error updating Address:", error);
@@ -186,6 +144,10 @@ export class ManageComponent implements OnInit, AfterViewInit {
     const lat = this.theFormGroup.get("latitude")?.value || 0;
     const lon = this.theFormGroup.get("longitude")?.value || 0;
 
+    if (this.map) {
+      this.map.remove();
+    }
+
     this.map = L.map("map").setView([lat, lon], 13);
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -193,7 +155,7 @@ export class ManageComponent implements OnInit, AfterViewInit {
     }).addTo(this.map);
 
     this.marker = L.marker([lat, lon], {
-      draggable: this.mode !== 1, // solo si no es modo vista
+      draggable: this.mode !== 1,
     }).addTo(this.map);
 
     if (this.marker.options.draggable) {
@@ -206,13 +168,8 @@ export class ManageComponent implements OnInit, AfterViewInit {
       });
     }
 
-    // Actualiza posición si el usuario escribe en el form
-    this.theFormGroup
-      .get("latitude")
-      ?.valueChanges.subscribe(() => this.updateMap());
-    this.theFormGroup
-      .get("longitude")
-      ?.valueChanges.subscribe(() => this.updateMap());
+    this.theFormGroup.get("latitude")?.valueChanges.subscribe(() => this.updateMap());
+    this.theFormGroup.get("longitude")?.valueChanges.subscribe(() => this.updateMap());
   }
 
   updateMap(): void {
@@ -223,5 +180,36 @@ export class ManageComponent implements OnInit, AfterViewInit {
       this.marker.setLatLng([lat, lon]);
       this.map.setView([lat, lon]);
     }
+  }
+
+  tryGeocode(): void {
+    const street = this.theFormGroup.get('street')?.value;
+    const number = this.theFormGroup.get('number')?.value;
+    if (street && number) {
+      this.geocodeAddress();
+    }
+  }
+
+  geocodeAddress(): void {
+    const street = this.theFormGroup.get('street')?.value;
+    const number = this.theFormGroup.get('number')?.value;
+    const query = encodeURIComponent(`${street} ${number}`);
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${query}`;
+
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        if (data.length > 0) {
+          const lat = parseFloat(data[0].lat);
+          const lon = parseFloat(data[0].lon);
+          this.theFormGroup.patchValue({ latitude: lat, longitude: lon });
+          this.updateMap();
+        } else {
+          Swal.fire('No encontrado', 'No se encontró la dirección en el mapa', 'warning');
+        }
+      })
+      .catch(() => {
+        Swal.fire('Error', 'Ocurrió un error al buscar la dirección', 'error');
+      });
   }
 }

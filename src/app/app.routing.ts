@@ -6,7 +6,7 @@ import { ProfileUpdateComponent } from './pages/profile-update/profile-update.co
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { UserProfileComponent } from './pages/user-profile/user-profile.component'; // Asegúrate de que esto esté importado
-
+import { ManageComponent } from './pages/addresses/manage/manage.component'; // Asegúrate de que esto esté importado
 const routes: Routes = [
   {
     path: 'users',
@@ -35,6 +35,11 @@ const routes: Routes = [
       }
     ]
   },
+  {
+  path: 'address/:userId',
+  component: ManageComponent
+},
+
   {
     path: '',
     component: AuthLayoutComponent,

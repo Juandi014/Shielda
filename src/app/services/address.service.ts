@@ -22,6 +22,10 @@ export class AddressService {
   update(theAddress: Address): Observable<Address> {
     return this.http.put<Address>(`${environment.url_ms_cinema}/api/addresses/${theAddress.id}`, theAddress);
   }
+ getByUserId(userId: number): Observable<Address | null> {
+  return this.http.get<Address>(`${environment.url_ms_cinema}/api/addresses/user/${userId}`);
+}
+
 
   delete(id: number) {
     return this.http.delete<Address>(`${environment.url_ms_cinema}/api/addresses/${id}`);

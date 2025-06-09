@@ -14,11 +14,19 @@ export class UserProfileComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private userService: UserService) {}
 
-  ngOnInit(): void {
-    this.userId = +this.route.snapshot.params['id'];
-    this.userService.getById(this.userId).subscribe({
-      next: (data) => this.user = data,
-      error: (err) => console.error(err)
-    });
-  }
+ngOnInit(): void {
+  this.route.params.subscribe(params => {
+    this.userId = +params['id'];
+
+    const savedProfile = localStorage.getItem('profile_' + this.userId);
+    if (savedProfile) {
+      this.user = JSON.parse(savedProfile);
+    } else {
+      this.userService.getById(this.userId).subscribe({
+        next: user => this.user = user,
+        error: () => this.user = { name: 'Desconocido', email: '', phone: '', photoUrl: '' }
+      });
+    }
+  });
+}
 }
