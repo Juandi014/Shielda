@@ -1,28 +1,37 @@
-<div class="container mt-5">
-  <h1 class="display-4 text-center mb-4">{{ user.name }} - Profile</h1>
+<!-- Header con fondo degradado -->
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+</div>
 
-  <div class="row align-items-center">
-    <!-- Foto a la izquierda más grande -->
-    <div class="col-md-4 text-center">
-      <img 
-        [src]="user.photoUrl || 'https://via.placeholder.com/300x300'" 
-        class="img-fluid  rounded-circle shadow"
-         style="width: 300px; height: 300px; object-fit: cover;"
-        alt="Foto de perfil"
-      />
-    </div>
+<!-- Contenido principal -->
+<div class="container-fluid mt--7">
+  <div class="row">
+    <div class="col">
+      <div class="card shadow">
+        <div class="card-header bg-transparent">
+          <h3 class="mb-0">{{ user.name }} - Profile</h3>
+        </div>
 
-    <!-- Datos del usuario -->
-    <div class="col-md-8">
-      <div class="mb-3">
-        <h4><strong>Nombre:</strong> {{ user.name }}</h4>
-      </div>
-      <div class="mb-3">
-        <h4><strong>Email:</strong> {{ user.email }}</h4>
-      </div>
-      <div class="mb-3">
-        <h4><strong>Teléfono:</strong> {{ user.phone || 'No registrado' }}</h4>
+        <div class="card-body">
+          <div class="row">
+            <!-- Foto -->
+            <div class="col-md-4 text-center mb-4">
+              <img
+                [src]="user.photoUrl || 'https://via.placeholder.com/250'"
+                class="img-fluid rounded-circle shadow"
+                style="width: 300px; height: 300px; object-fit: cover;"
+              />
+            </div>
+
+            <!-- Datos -->
+            <div class="col-md-8">
+              <h4><strong>Nombre:</strong> {{ user.name }}</h4>
+              <h4><strong>Email:</strong> {{ user.email }}</h4>
+              <h4><strong>Teléfono:</strong> {{ user.phone || 'No registrado' }}</h4>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
+

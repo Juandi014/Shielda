@@ -33,14 +33,28 @@ export class RegisterComponent implements OnInit {
       { theme: 'outline', size: 'large' }
     );
 
-    // 🔐 IMPORTANTE: hace visible la función al atributo `data-callback`
     (window as any).handleGoogleRegister = this.handleGoogleRegister.bind(this);
   }
 
   register(): void {
     this.userService.create(this.user).subscribe({
-      next: () => {
+      next: (newUser) => {
+        // ✅ Mostrar alerta
         Swal.fire('Registrado', 'Usuario creado correctamente', 'success');
+
+        // ✅ Guardar usuario en localStorage (para login sin backend)
+        const localUsers = JSON.parse(localStorage.getItem('local_users') || '[]');
+
+        localUsers.push({
+          id: newUser.id,
+          name: newUser.name,
+          email: newUser.email,
+          password: this.user.password,
+          photoUrl: '' // Si quieres agregar foto más adelante, puedes hacerlo aquí
+        });
+
+        localStorage.setItem('local_users', JSON.stringify(localUsers));
+
         this.router.navigate(['/login']);
       },
       error: () => {

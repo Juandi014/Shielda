@@ -1,10 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { SecurityService } from './services/security.service';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  templateUrl: './app.component.html'
 })
-export class AppComponent {
-  title = 'argon-dashboard-angular';
+export class AppComponent implements OnInit {
+
+  constructor(private securityService: SecurityService) {}
+
+  ngOnInit(): void {
+    // 🔄 Restaurar sesión desde localStorage si existe
+    this.securityService.verifyActualSession();
+  }
 }

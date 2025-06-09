@@ -1,9 +1,11 @@
 import { Routes } from '@angular/router';
+import { UserProfileComponent } from 'src/app/pages/user-profile/user-profile.component';
+import { ProfileUpdateComponent } from 'src/app/pages/profile-update/profile-update.component';
 
 import { DashboardComponent } from '../../pages/dashboard/dashboard.component';
 import { IconsComponent } from '../../pages/icons/icons.component';
 import { MapsComponent } from '../../pages/maps/maps.component';
-import { UserProfileComponent } from '../../pages/user-profile/user-profile.component';
+
 import { TablesComponent } from '../../pages/tables/tables.component';
 
 export const AdminLayoutRoutes: Routes = [
@@ -13,6 +15,9 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'icons', component: IconsComponent },
     { path: 'maps', component: MapsComponent },
     { path: 'dashboard', component: DashboardComponent },
+    { path: 'dashboard', component: DashboardComponent },
+  { path: 'profile/:id', component: UserProfileComponent },
+  { path: 'profile/update/:id', component: ProfileUpdateComponent },
   {
   path: 'profile/:id',
   component: UserProfileComponent
@@ -37,6 +42,8 @@ export const AdminLayoutRoutes: Routes = [
     }
   ]
 },
+{ path: 'profile/:id', component: UserProfileComponent },
+
 
     {
         path: 'user-roles',
