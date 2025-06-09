@@ -23,6 +23,8 @@ export class ListComponent implements OnInit {
 
   ngOnInit(): void {
     this.list();
+    this.loadUsers();
+    this.loadRoles();
   }
 
   loadUsers() {
@@ -35,6 +37,16 @@ export class ListComponent implements OnInit {
     this.UserRolesService.getRoles().subscribe(roles => {
       this.roles = roles;
     });
+  }
+
+  getUserName(userId: number): string {
+    const user = this.users.find(u => u.id === userId);
+    return user ? user.name : 'Desconocido';
+  }
+
+  getRoleName(roleId: number): string {
+    const role = this.roles.find(r => r.id === roleId);
+    return role ? role.name : 'Desconocido';
   }
 
   list(){

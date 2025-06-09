@@ -17,61 +17,112 @@
                             <div class="row">
                                 <div class="col-3">ID</div>
                                 <div class="col-9">
-                                    <input type="text" class="form-control" formControlName="id" disabled>
+                                    <input type="text" class="form-control" formControlName="id"  disabled>
                                 </div>
                             </div>
                             <br>
                             <div class="row">
-                                <div class="col-3">Name</div>
-                                <div class="col-9">
-                                    <input type="text" class="form-control" 
-                                        [disabled]="mode==1" formControlName="name">
-                                    <div *ngIf="getTheFormGroup.name.errors && (getTheFormGroup.name.dirty || getTheFormGroup.name.touched || trySend)">
-                                        <strong *ngIf="getTheFormGroup.name?.errors?.required"
-                                            class="msnError">Requerido</strong>
-                                        <strong *ngIf="getTheFormGroup.name?.errors?.minlength"
-                                            class="msnError">Inválido</strong>
-                                    </div>
+                            <div class="col-3">User</div>
+                            <div class="col-9">
+                                
+                                <!-- Mostrar input readonly si está en modo view -->
+                                <input *ngIf="mode === 1"
+                                    type="text"
+                                    class="form-control"
+                                    [value]="userNameToShow"
+                                    readonly />
+
+                                <!-- Mostrar select si NO está en modo view -->
+                                <select *ngIf="mode !== 1"
+                                        class="form-control"
+                                        formControlName="user_id">
+                                <option value="">Seleccione un usuario</option>
+                                <option *ngFor="let user of users" [value]="user.id">{{ user.name }}</option>
+                                </select>
+
+                                <!-- Validaciones -->
+                                <div *ngIf="getTheFormGroup.user_id.errors && (getTheFormGroup.user_id.dirty || getTheFormGroup.user_id.touched || trySend)">
+                                <strong *ngIf="getTheFormGroup.user_id?.errors?.required" class="msnError">Requerido</strong>
                                 </div>
+                            </div>
                             </div>
                             <br>
                             <div class="row">
-                                <div class="col-3">Description</div>
-                                <div class="col-9">
-                                    <input type="text" class="form-control" 
-                                        [disabled]="mode==1" formControlName="description">
-                                    <div *ngIf="getTheFormGroup.description.errors && (getTheFormGroup.description.dirty || getTheFormGroup.description.touched || trySend)">
-                                        <strong *ngIf="getTheFormGroup.description?.errors?.required"
-                                            class="msnError">Requerido</strong>
-                                        <strong *ngIf="getTheFormGroup.description?.errors?.minlength"
-                                            class="msnError">Inválido</strong>
-                                    </div>
+                            <div class="col-3">Role</div>
+                            <div class="col-9">
+                                
+                                <!-- Mostrar input readonly si está en modo view -->
+                                <input *ngIf="mode === 1"
+                                    type="text"
+                                    class="form-control"
+                                    [value]="userRoleToShow"
+                                    readonly />
+
+                                <!-- Mostrar select si NO está en modo view -->
+                                <select *ngIf="mode !== 1"
+                                        class="form-control"
+                                        formControlName="role_id">
+                                <option value="">Seleccione un role</option>
+                                <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
+                                </select>
+
+                                <!-- Validaciones -->
+                                <div *ngIf="getTheFormGroup.role_id.errors && (getTheFormGroup.role_id.dirty || getTheFormGroup.role_id.touched || trySend)">
+                                <strong *ngIf="getTheFormGroup.role_id?.errors?.required" class="msnError">Requerido</strong>
                                 </div>
                             </div>
+                            </div>
                             <br>
+                            <div class="row">
+                            <div class="col-3">Start At</div>
+                            <div class="col-9">
+                                <!-- Si está en modo vista, mostrar el valor como solo texto -->
+                                <input *ngIf="mode === 1"
+                                    type="text"
+                                    class="form-control"
+                                    [value]="formatDateToView(theFormGroup.value.startAt)"
+                                    readonly />
+                                <input *ngIf="mode === 3"
+                                    type="datetime-local"
+                                    class="form-control"
+                                    [value]="formatDateToView(theFormGroup.value.startAt)"/>
+                                <!-- Si no está en modo vista, usar el input editable -->
+                                <input *ngIf="mode === 2"
+                                    type="datetime-local"
+                                    class="form-control"
+                                    formControlName="startAt" />
 
-                            <!-- NUEVOS CAMPOS INSERTADOS AQUÍ -->
-                            <div class="form-group">
-                                <label for="userId">Usuario</label>
-                                <select formControlName="userId" class="form-control">
-                                    <option value="">Seleccione un usuario</option>
-                                    <option *ngFor="let user of users" [value]="user.id">
-                                        {{ user.name }}
-                                    </option>
-                                </select>
+                                <div *ngIf="getTheFormGroup.startAt.errors && (getTheFormGroup.startAt.dirty || getTheFormGroup.startAt.touched || trySend)">
+                                <strong *ngIf="getTheFormGroup.startAt?.errors?.required" class="msnError">Requerido</strong>
+                                </div>
                             </div>
-
-                            <div class="form-group">
-                                <label for="roleId">Rol</label>
-                                <select formControlName="roleId" class="form-control">
-                                    <option value="">Seleccione un rol</option>
-                                    <option *ngFor="let role of roles" [value]="role.id">
-                                        {{ role.name }}
-                                    </option>
-                                </select>
                             </div>
-                            <!-- FIN NUEVOS CAMPOS -->
+                            <br>
+                            <div class="row">
+                            <div class="col-3">End At</div>
+                            <div class="col-9">
+                                <!-- Si está en modo vista, mostrar el valor como solo texto -->
+                                <input *ngIf="mode === 1"
+                                    type="text"
+                                    class="form-control"
+                                    [value]="formatDateToView(theFormGroup.value.endAt)"
+                                    readonly />
+                                <input *ngIf="mode === 3"
+                                    type="datetime-local"
+                                    class="form-control"
+                                    [value]="formatDateToView(theFormGroup.value.endAt)"/>
+                                <!-- Si no está en modo vista, usar el input editable -->
+                                <input *ngIf="mode === 2"
+                                    type="datetime-local"
+                                    class="form-control"
+                                    formControlName="endAt" />
 
+                                <div *ngIf="getTheFormGroup.endAt.errors && (getTheFormGroup.endAt.dirty || getTheFormGroup.endAt.touched || trySend)">
+                                <strong *ngIf="getTheFormGroup.endAt?.errors?.required" class="msnError">Requerido</strong>
+                                </div>
+                            </div>
+                            </div>
+                            <br>
                             <div class="row">
                                 <div class="col-3"></div>
                                 <div class="col-9">

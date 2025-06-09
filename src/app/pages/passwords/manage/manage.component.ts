@@ -22,7 +22,7 @@ export class ManageComponent implements OnInit {
   userNameToShow: string = '';
   minDate: string; // Para el campo de fecha, si es necesario
   constructor(private activatedRoute: ActivatedRoute,
-    private SessionsService: PasswordService,
+    private PasswordsService: PasswordService,
     private UsersService: UserService,
     private router: Router,
     private theFormBuilder: FormBuilder //Definir las reglas
@@ -108,7 +108,7 @@ export class ManageComponent implements OnInit {
   }
 
   getPassword(id: number) {
-    this.SessionsService.view(id).subscribe({
+    this.PasswordsService.view(id).subscribe({
       next: (response) => {
         this.Password = response;
 
@@ -154,7 +154,7 @@ export class ManageComponent implements OnInit {
     formValue.startAt = this.formatDate(new Date(formValue.startAt));
     formValue.endAt = this.formatDate(new Date(formValue.endAt));
 
-    this.SessionsService.create(formValue.user_id, formValue).subscribe({
+    this.PasswordsService.create(formValue.user_id, formValue).subscribe({
       next: (Password) => {
         console.log('Password created successfully:', Password);
         Swal.fire({
@@ -188,7 +188,7 @@ export class ManageComponent implements OnInit {
   formValue.endAt = this.formatDate(new Date(formValue.endAt));
   console.log(formValue);
 
-  this.SessionsService.update(formValue).subscribe({
+  this.PasswordsService.update(formValue).subscribe({
     next: (Password) => {
       console.log('Password updated successfully:', Password);
       Swal.fire({

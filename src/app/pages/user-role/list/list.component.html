@@ -21,11 +21,11 @@
                             <td>Opciones</td>
                         </tr>
                         <tr *ngFor="let userRole of userRoles">
-                            <td>{{UserRole.id}}</td>
-                            <td>{{UserRole.users}}</td>
-                            <td>{{UserRole.roles}}</td>
-                            <td>{{UserRole.startAt | date: 'dd/MM/yyyy'}}</td>
-                            <td>{{UserRole.endAt | date: 'dd/MM/yyyy'}}</td>
+                            <td>{{userRole.id}}</td>
+                            <td>{{userRole.user_id}}</td>
+                            <td>{{userRole.role_id}}</td>
+                            <td>{{getUserName(userRole.startAt)}}</td>
+                            <td>{{getRoleName(userRole.endAt)}}</td>
                             <td>
                                 <button class="btn btn-warning" (click)="view(userRole.id)">Ver</button>
                                 <button class="btn btn-primary" (click)="edit(userRole.id)">Editar</button>
