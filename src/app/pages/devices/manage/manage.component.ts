@@ -40,6 +40,12 @@ export class ManageComponent implements OnInit {
       this.mode = 3;
     }
 
+    if (this.mode === 1) {
+    this.theFormGroup.get('name')?.disable();
+    this.theFormGroup.get('ip')?.disable();
+    this.theFormGroup.get('operatingSystem')?.disable();
+    }
+
     // cargar los usuarios
     this.UsersService.list().subscribe({
       next: (data) => {
@@ -120,7 +126,7 @@ export class ManageComponent implements OnInit {
     });
   }
   back() {
-    this.router.navigate(["/Devices/list"]);
+    this.router.navigate(["/devices/list"]);
   }
 
   create() {
@@ -141,7 +147,7 @@ export class ManageComponent implements OnInit {
           text: "Registro creado correctamente.",
           icon: "success",
         });
-        this.router.navigate(["/Devices/list"]);
+        this.router.navigate(["/devices/list"]);
       },
       error: (error) => {
         console.error("Error creating Device:", error);
@@ -166,7 +172,7 @@ export class ManageComponent implements OnInit {
           text: "Registro actualizado correctamente.",
           icon: "success",
         });
-        this.router.navigate(["/Devices/list"]);
+        this.router.navigate(["/devices/list"]);
       },
       error: (error) => {
         console.error("Error updating Device:", error);

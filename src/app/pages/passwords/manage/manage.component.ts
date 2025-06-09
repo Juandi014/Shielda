@@ -129,7 +129,7 @@ export class ManageComponent implements OnInit {
     });
   }
   back() {
-    this.router.navigate(['/Passwords/list']);
+    this.router.navigate(['/passwords/list']);
   }
 
   create() {
@@ -155,7 +155,7 @@ export class ManageComponent implements OnInit {
           text: 'Registro creado correctamente.',
           icon: 'success',
         })
-        this.router.navigate(['/Passwords/list']);
+        this.router.navigate(['/passwords/list']);
       },
       error: (error) => {
         console.error('Error creating Password:', error);
@@ -180,7 +180,7 @@ export class ManageComponent implements OnInit {
           text: 'Registro actualizado correctamente.',
           icon: 'success',
         })
-        this.router.navigate(['/Passwords/list']);
+        this.router.navigate(['/passwords/list']);
       },
       error: (error) => {
         console.error('Error updating Password:', error);

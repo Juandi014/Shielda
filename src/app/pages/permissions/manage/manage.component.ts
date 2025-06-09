@@ -74,7 +74,7 @@ export class ManageComponent implements OnInit {
     });
   }
   back() {
-    this.router.navigate(['/Permissions/list']);
+    this.router.navigate(['/permissions/list']);
   }
 
   create() {
@@ -87,6 +87,7 @@ export class ManageComponent implements OnInit {
       })
       return;
     }
+    console.log(this.theFormGroup.value);
     this.PermissionsService.create(this.theFormGroup.value).subscribe({
       next: (Permission) => {
         console.log('Permission created successfully:', Permission);
@@ -95,7 +96,7 @@ export class ManageComponent implements OnInit {
           text: 'Registro creado correctamente.',
           icon: 'success',
         })
-        this.router.navigate(['/Permissions/list']);
+        this.router.navigate(['/permissions/list']);
       },
       error: (error) => {
         console.error('Error creating Permission:', error);
@@ -120,7 +121,7 @@ export class ManageComponent implements OnInit {
           text: 'Registro actualizado correctamente.',
           icon: 'success',
         })
-        this.router.navigate(['/Permissions/list']);
+        this.router.navigate(['/permissions/list']);
       },
       error: (error) => {
         console.error('Error updating Permission:', error);

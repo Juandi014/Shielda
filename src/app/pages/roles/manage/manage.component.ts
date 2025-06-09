@@ -39,6 +39,11 @@ export class ManageComponent implements OnInit {
       this.getRole(this.Role.id)
     }
 
+    if (this.mode === 1) {
+    this.theFormGroup.get('name')?.disable();
+    this.theFormGroup.get('description')?.disable();
+  }
+
   }
   configFormGroup() {
     this.theFormGroup = this.theFormBuilder.group({
@@ -74,7 +79,7 @@ export class ManageComponent implements OnInit {
     });
   }
   back() {
-    this.router.navigate(['/Roles/list']);
+    this.router.navigate(['/roles/list']);
   }
 
   create() {
@@ -95,7 +100,7 @@ export class ManageComponent implements OnInit {
           text: 'Registro creado correctamente.',
           icon: 'success',
         })
-        this.router.navigate(['/Roles/list']);
+        this.router.navigate(['/roles/list']);
       },
       error: (error) => {
         console.error('Error creating Role:', error);
@@ -120,7 +125,7 @@ export class ManageComponent implements OnInit {
           text: 'Registro actualizado correctamente.',
           icon: 'success',
         })
-        this.router.navigate(['/Roles/list']);
+        this.router.navigate(['/roles/list']);
       },
       error: (error) => {
         console.error('Error updating Role:', error);

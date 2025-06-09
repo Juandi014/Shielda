@@ -38,7 +38,10 @@ export class ManageComponent implements OnInit {
       this.SecurityQuestion.id = this.activatedRoute.snapshot.params.id
       this.getSecurityQuestion(this.SecurityQuestion.id)
     }
-
+    if (this.mode === 1) {
+    this.theFormGroup.get('name')?.disable();
+    this.theFormGroup.get('description')?.disable();
+    }
   }
   configFormGroup() {
     this.theFormGroup = this.theFormBuilder.group({
@@ -74,7 +77,7 @@ export class ManageComponent implements OnInit {
     });
   }
   back() {
-    this.router.navigate(['/Security-questions/list']);
+    this.router.navigate(['/security-questions/list']);
   }
 
   create() {
@@ -95,7 +98,7 @@ export class ManageComponent implements OnInit {
           text: 'Registro creado correctamente.',
           icon: 'success',
         })
-        this.router.navigate(['/Security-questions/list']);
+        this.router.navigate(['/security-questions/list']);
       },
       error: (error) => {
         console.error('Error creating SecurityQuestion:', error);
@@ -120,7 +123,7 @@ export class ManageComponent implements OnInit {
           text: 'Registro actualizado correctamente.',
           icon: 'success',
         })
-        this.router.navigate(['/Security-questions/list']);
+        this.router.navigate(['/security-questions/list']);
       },
       error: (error) => {
         console.error('Error updating SecurityQuestion:', error);

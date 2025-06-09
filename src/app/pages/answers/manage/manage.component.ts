@@ -44,6 +44,10 @@ export class ManageComponent implements OnInit {
       this.mode = 3;
     }
 
+    if (this.mode === 1) {
+      this.theFormGroup.get('content')?.disable();
+    }
+
     // cargar los usuarios
     this.UsersService.list().subscribe({
       next: (data) => {
@@ -105,7 +109,7 @@ export class ManageComponent implements OnInit {
     });
   }
   back() {
-    this.router.navigate(["/Answers/list"]);
+    this.router.navigate(["/answers/list"]);
   }
 
   create() {
@@ -128,7 +132,7 @@ export class ManageComponent implements OnInit {
           text: "Registro creado correctamente.",
           icon: "success",
         });
-        this.router.navigate(["/Answers/list"]);
+        this.router.navigate(["/answers/list"]);
       },
       error: (error) => {
         console.error("Error creating Answer:", error);
@@ -153,7 +157,7 @@ export class ManageComponent implements OnInit {
           text: "Registro actualizado correctamente.",
           icon: "success",
         });
-        this.router.navigate(["/Answers/list"]);
+        this.router.navigate(["/answers/list"]);
       },
       error: (error) => {
         console.error("Error updating Answer:", error);
