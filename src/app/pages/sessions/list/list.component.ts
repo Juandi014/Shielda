@@ -11,12 +11,25 @@ import Swal from 'sweetalert2';
 })
 export class ListComponent implements OnInit {
   sessions: Session[] = [];
+  users: any[] = []; // Lista de usuarios
   constructor(private sessionsService:SessionService,
     private router:Router
   ) { }
 
   ngOnInit(): void {
     this.list();
+    this.loadUsers();
+  }
+
+  loadUsers() {
+    this.sessionsService.getUsers().subscribe(users => {
+      this.users = users;
+    });
+  }
+
+  getUserName(userId: number): string {
+    const user = this.users.find(u => u.id === userId);
+    return user ? user.name : 'Desconocido';
   }
 
   list(){

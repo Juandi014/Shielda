@@ -1,4 +1,4 @@
-<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+<div class="header bg-purple pb-8 pt-5 pt-md-8">
 </div>
 <!-- Page content -->
 <div class="container-fluid mt--7">
@@ -21,11 +21,11 @@
                             <td>Opciones</td>
                         </tr>
                         <tr *ngFor="let userRole of userRoles">
-                            <td>{{UserRole.id}}</td>
-                            <td>{{UserRole.users}}</td>
-                            <td>{{UserRole.roles}}</td>
-                            <td>{{UserRole.startAt | date: 'dd/MM/yyyy'}}</td>
-                            <td>{{UserRole.endAt | date: 'dd/MM/yyyy'}}</td>
+                            <td>{{userRole.id}}</td>
+                            <td>{{getUserName(userRole.user_id)}}</td>
+                            <td>{{getRoleName(userRole.role_id)}}</td>
+                            <td>{{userRole.startAt}}</td>
+                            <td>{{userRole.endAt}}</td>
                             <td>
                                 <button class="btn btn-warning" (click)="view(userRole.id)">Ver</button>
                                 <button class="btn btn-primary" (click)="edit(userRole.id)">Editar</button>

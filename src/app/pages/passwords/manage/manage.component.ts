@@ -1,3 +1,4 @@
+import { state } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,8 +17,9 @@ export class ManageComponent implements OnInit {
   Password: Password;
   theFormGroup: FormGroup; // Policía de formulario
   trySend: boolean;
-  userId: number = 0; // Asignar un valor por defecto
+  user_id: number = 0; // Asignar un valor por defecto
   users: any[] = []; // Lista de usuarios
+  userNameToShow: string = '';
   minDate: string; // Para el campo de fecha, si es necesario
   constructor(private activatedRoute: ActivatedRoute,
     private PasswordsService: PasswordService,
@@ -40,7 +42,6 @@ export class ManageComponent implements OnInit {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
-
   ngOnInit(): void {
     const currentUrl = this.activatedRoute.snapshot.url.join('/');
     if (currentUrl.includes('view')) {
@@ -51,47 +52,40 @@ export class ManageComponent implements OnInit {
       this.mode = 3;
     }
 
-    // cargar los usuarios
-        this.UsersService.list().subscribe({
-          next: (data) => {
-            this.users = data;
-          },
-          error: () => {
-            Swal.fire("Error", "No se pudieron cargar los usuarios", "error");
-          },
-        });
+    if (this.mode === 1) {
+    this.theFormGroup.get('content')?.disable();
+    }
     
+    this.UsersService.list().subscribe({
+      next: (data) => {
+        this.users = data;
+
+        // Cargar sesión solo después de tener los usuarios
         if (this.activatedRoute.snapshot.params.id) {
           this.Password.id = this.activatedRoute.snapshot.params.id;
           this.getPassword(this.Password.id);
         }
+      },
+      error: () => {
+        Swal.fire("Error", "No se pudieron cargar los usuarios", "error");
+      },
+    });
 
   }
-  loadUserAndInitForm() {
-      // Ejemplo: obtén el userId desde parámetros (o desde un servicio Auth)
-      const userId = +this.activatedRoute.snapshot.params.userId || 0;
-  
-      if (!userId) {
-        Swal.fire("Error", "No se encontró el usuario para asignar dirección", "error");
-        this.router.navigate(["/users/list"]);
-        return;
-      }
-  
-      this.UsersService.getById(userId).subscribe({
-        next: (user) => {
-          // Inicializa el form con userId y userName
-          this.theFormGroup.patchValue({
-            userId: user.id,
-            userName: user.name,
-            // los otros campos vacíos o con valores por defecto
-          });
-        },
-        error: () => {
-          Swal.fire("Error", "No se pudo cargar el usuario", "error");
-          this.router.navigate(["/users/list"]);
-        },
-      });
-    }
+
+  formatDateToView(value: any): string {
+  if (!value) return '';
+
+  const date = new Date(value);
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  return `${year}-${month}-${day} ${hours}:${minutes}`;
+}
+
+
   configFormGroup() {
     this.theFormGroup = this.theFormBuilder.group({
       // primer elemento del vector, valor por defecto
@@ -100,10 +94,14 @@ export class ManageComponent implements OnInit {
       content: ['', [Validators.required, Validators.minLength(2)]],
       startAt: [null, Validators.required],
       endAt: [null, Validators.required],
-      userId: [null, [Validators.required]],
+      user_id: [null, [Validators.required]],
     })
   }
 
+  getUserNameById(id: number): string {
+    const user = this.users.find(u => u.id === id);
+    return user ? user.name : '';
+  }
 
   get getTheFormGroup() {
     return this.theFormGroup.controls
@@ -114,13 +112,21 @@ export class ManageComponent implements OnInit {
       next: (response) => {
         this.Password = response;
 
+        console.log('Contenido recibido del backend:', this.Password.content);
+
         this.theFormGroup.patchValue({
           id: this.Password.id,
           content: this.Password.content,
           startAt: this.Password.startAt ? new Date(this.Password.startAt) : null,
           endAt: this.Password.endAt ? new Date(this.Password.endAt) : null,
+          user_id: this.Password.user_id,
         });
         
+
+        // Buscar y guardar el nombre del usuario para mostrarlo en modo "view"
+      const foundUser = this.users.find(u => u.id === this.Password.user_id);
+      this.userNameToShow = foundUser ? foundUser.name : '';
+
         console.log('Password fetched successfully:', this.Password);
       },
       error: (error) => {
@@ -131,6 +137,7 @@ export class ManageComponent implements OnInit {
   back() {
     this.router.navigate(['/passwords/list']);
   }
+
 
   create() {
     this.trySend = true;
@@ -147,7 +154,7 @@ export class ManageComponent implements OnInit {
     formValue.startAt = this.formatDate(new Date(formValue.startAt));
     formValue.endAt = this.formatDate(new Date(formValue.endAt));
 
-    this.PasswordsService.create(formValue.userId, formValue).subscribe({
+    this.PasswordsService.create(formValue.user_id, formValue).subscribe({
       next: (Password) => {
         console.log('Password created successfully:', Password);
         Swal.fire({
@@ -163,29 +170,38 @@ export class ManageComponent implements OnInit {
     });
   }
   update() {
-    this.trySend = true;
-    if (this.theFormGroup.invalid) {
-      Swal.fire({
-        title: 'Error!',
-        text: 'Por favor, complete todos los campos requeridos.',
-        icon: 'error',
-      })
-      return;
-    }
-    this.PasswordsService.update(this.theFormGroup.value).subscribe({
-      next: (Password) => {
-        console.log('Password updated successfully:', Password);
-        Swal.fire({
-          title: 'Actualizado!',
-          text: 'Registro actualizado correctamente.',
-          icon: 'success',
-        })
-        this.router.navigate(['/passwords/list']);
-      },
-      error: (error) => {
-        console.error('Error updating Password:', error);
-      }
+  this.trySend = true;
+  if (this.theFormGroup.invalid) {
+    Swal.fire({
+      title: 'Error!',
+      text: 'Por favor, complete todos los campos requeridos.',
+      icon: 'error',
     });
+    return;
   }
+
+  // Clona el valor del formulario
+  const formValue = { ...this.theFormGroup.value };
+
+  // Formatea la fecha startAt para el backend
+  formValue.startAt = this.formatDate(new Date(formValue.startAt));
+  formValue.endAt = this.formatDate(new Date(formValue.endAt));
+  console.log(formValue);
+
+  this.PasswordsService.update(formValue).subscribe({
+    next: (Password) => {
+      console.log('Password updated successfully:', Password);
+      Swal.fire({
+        title: 'Actualizado!',
+        text: 'Registro actualizado correctamente.',
+        icon: 'success',
+      });
+      this.router.navigate(['/passwords/list']);
+    },
+    error: (error) => {
+      console.error('Error updating Password:', error);
+    }
+  });
+}
 
 }

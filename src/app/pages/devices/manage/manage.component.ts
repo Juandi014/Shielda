@@ -16,8 +16,9 @@ export class ManageComponent implements OnInit {
   Device: Device;
   theFormGroup: FormGroup; // Policía de formulario
   trySend: boolean;
-  userId: number = 0; // Asignar un valor por defecto
+  user_id: number = 0; // Asignar un valor por defecto
   users: any[] = []; // Lista de usuarios
+  userNameToShow: string = '';
   constructor(
     private activatedRoute: ActivatedRoute,
     private DevicesService: DeviceService,
@@ -43,53 +44,25 @@ export class ManageComponent implements OnInit {
     if (this.mode === 1) {
     this.theFormGroup.get('name')?.disable();
     this.theFormGroup.get('ip')?.disable();
-    this.theFormGroup.get('operatingSystem')?.disable();
+    this.theFormGroup.get('operating_system')?.disable();
     }
 
     // cargar los usuarios
     this.UsersService.list().subscribe({
       next: (data) => {
         this.users = data;
+
+        if (this.activatedRoute.snapshot.params.id) {
+          this.Device.id = this.activatedRoute.snapshot.params.id;
+          this.getDevice(this.Device.id);
+        }
       },
       error: () => {
         Swal.fire("Error", "No se pudieron cargar los usuarios", "error");
       },
     });
-
-    if (this.activatedRoute.snapshot.params.id) {
-      this.Device.id = this.activatedRoute.snapshot.params.id;
-      this.getDevice(this.Device.id);
-    }
   }
-  loadUserAndInitForm() {
-    // Ejemplo: obtén el userId desde parámetros (o desde un servicio Auth)
-    const userId = +this.activatedRoute.snapshot.params.userId || 0;
-
-    if (!userId) {
-      Swal.fire(
-        "Error",
-        "No se encontró el usuario para asignar dirección",
-        "error"
-      );
-      this.router.navigate(["/users/list"]);
-      return;
-    }
-
-    this.UsersService.getById(userId).subscribe({
-      next: (user) => {
-        // Inicializa el form con userId y userName
-        this.theFormGroup.patchValue({
-          userId: user.id,
-          userName: user.name,
-          // los otros campos vacíos o con valores por defecto
-        });
-      },
-      error: () => {
-        Swal.fire("Error", "No se pudo cargar el usuario", "error");
-        this.router.navigate(["/users/list"]);
-      },
-    });
-  }
+  
   configFormGroup() {
     this.theFormGroup = this.theFormBuilder.group({
       // primer elemento del vector, valor por defecto
@@ -97,9 +70,14 @@ export class ManageComponent implements OnInit {
       id: [0, []],
       name: ["", [Validators.required, Validators.minLength(2)]],
       ip: ["", [Validators.required, Validators.minLength(2)]],
-      operatingSystem: ["", [Validators.required, Validators.minLength(2)]],
-      userId: [null, [Validators.required]],
+      operating_system: ["", [Validators.required, Validators.minLength(2)]],
+      user_id: [null, [Validators.required]],
     });
+  }
+
+  getUserNameById(id: number): string {
+    const user = this.users.find(u => u.id === id);
+    return user ? user.name : '';
   }
 
   get getTheFormGroup() {
@@ -111,12 +89,19 @@ export class ManageComponent implements OnInit {
       next: (response) => {
         this.Device = response;
 
+        console.log(this.Device)
+
         this.theFormGroup.patchValue({
           id: this.Device.id,
           name: this.Device.name,
           ip: this.Device.ip,
-          operatingSystem: this.Device.operatingSystem
+          operating_system: this.Device.operating_system,
+          user_id: this.Device.user_id,
         });
+
+        // Buscar y guardar el nombre del usuario para mostrarlo en modo "view"
+      const foundUser = this.users.find(u => u.id === this.Device.user_id);
+      this.userNameToShow = foundUser ? foundUser.name : '';
 
         console.log("Device fetched successfully:", this.Device);
       },
@@ -139,7 +124,7 @@ export class ManageComponent implements OnInit {
       });
       return;
     }
-    this.DevicesService.create(this.theFormGroup.value.userId, this.theFormGroup.value).subscribe({
+    this.DevicesService.create(this.theFormGroup.value.user_id, this.theFormGroup.value).subscribe({
       next: (Device) => {
         console.log("Device created successfully:", Device);
         Swal.fire({

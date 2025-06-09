@@ -26,5 +26,8 @@ export class DeviceService {
   delete(id: number) {
     return this.http.delete<Device>(`${environment.url_ms_cinema}/api/devices/${id}`);
   }
+  getUsers(): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.url_ms_cinema}/api/users`);
+  }
 
 }

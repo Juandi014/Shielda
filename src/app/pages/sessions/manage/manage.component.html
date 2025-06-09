@@ -1,4 +1,4 @@
-<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+<div class="header bg-purple pb-8 pt-5 pt-md-8">
 </div>
 <!-- Page content -->
 <div class="container-fluid mt--7">
@@ -35,14 +35,14 @@
                                 <!-- Mostrar select si NO está en modo view -->
                                 <select *ngIf="mode !== 1"
                                         class="form-control"
-                                        formControlName="userId">
+                                        formControlName="user_id">
                                 <option value="">Seleccione un usuario</option>
                                 <option *ngFor="let user of users" [value]="user.id">{{ user.name }}</option>
                                 </select>
 
                                 <!-- Validaciones -->
-                                <div *ngIf="getTheFormGroup.userId.errors && (getTheFormGroup.userId.dirty || getTheFormGroup.userId.touched || trySend)">
-                                <strong *ngIf="getTheFormGroup.userId?.errors?.required" class="msnError">Requerido</strong>
+                                <div *ngIf="getTheFormGroup.user_id.errors && (getTheFormGroup.user_id.dirty || getTheFormGroup.user_id.touched || trySend)">
+                                <strong *ngIf="getTheFormGroup.user_id?.errors?.required" class="msnError">Requerido</strong>
                                 </div>
                             </div>
                             </div>

@@ -26,5 +26,12 @@ export class AnswerService {
   delete(id: number) {
     return this.http.delete<Answer>(`${environment.url_ms_cinema}/api/answers/${id}`);
   }
+  getUsers(): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.url_ms_cinema}/api/users`);
+  }
+
+  getQuestions(): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.url_ms_cinema}/api/security-questions`);
+  }
 
 }

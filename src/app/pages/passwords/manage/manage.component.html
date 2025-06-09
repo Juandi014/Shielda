@@ -1,4 +1,4 @@
-<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+<div class="header bg-purple pb-8 pt-5 pt-md-8">
 </div>
 <!-- Page content -->
 <div class="container-fluid mt--7">
@@ -22,16 +22,29 @@
                             </div>
                             <br>
                             <div class="row">
-                                <div class="col-3">User</div>
-                                <div class="col-9">
-                                    <select class="form-control" formControlName="userId" [disabled]="mode==1">
-                                    <option value="">Seleccione un usuario</option>
-                                    <option *ngFor="let user of users" [value]="user.id">{{ user.name }}</option>
-                                    </select>
-                                    <div *ngIf="getTheFormGroup.userId.errors && (getTheFormGroup.userId.dirty || getTheFormGroup.userId.touched || trySend)">
-                                    <strong *ngIf="getTheFormGroup.userId?.errors?.required" class="msnError">Requerido</strong>
-                                    </div>
+                            <div class="col-3">User</div>
+                            <div class="col-9">
+                                
+                                <!-- Mostrar input readonly si está en modo view -->
+                                <input *ngIf="mode === 1"
+                                    type="text"
+                                    class="form-control"
+                                    [value]="userNameToShow"
+                                    readonly />
+
+                                <!-- Mostrar select si NO está en modo view -->
+                                <select *ngIf="mode !== 1"
+                                        class="form-control"
+                                        formControlName="user_id">
+                                <option value="">Seleccione un usuario</option>
+                                <option *ngFor="let user of users" [value]="user.id">{{ user.name }}</option>
+                                </select>
+
+                                <!-- Validaciones -->
+                                <div *ngIf="getTheFormGroup.user_id.errors && (getTheFormGroup.user_id.dirty || getTheFormGroup.user_id.touched || trySend)">
+                                <strong *ngIf="getTheFormGroup.user_id?.errors?.required" class="msnError">Requerido</strong>
                                 </div>
+                            </div>
                             </div>
                             <br>
                             <div class="row">
@@ -52,31 +65,53 @@
                             </div>
                             <br>
                             <div class="row">
-                                <div class="col-3">StartAt</div>
-                                <div class="col-9">
-                                    <input type="datetime-local" class="form-control"
-                                        [disabled]="mode==1"
-                                        [min]="minDate"
-                                        formControlName="startAt">
-                                    <div *ngIf="getTheFormGroup.startAt.errors && (getTheFormGroup.startAt.dirty || getTheFormGroup.startAt.touched || trySend)">
-                                        <strong *ngIf="getTheFormGroup.startAt?.errors?.required" class="msnError">Requerido</strong>
-                                        <strong *ngIf="getTheFormGroup.startAt?.errors?.min" class="msnError">Fecha inválida</strong>
-                                    </div>
+                            <div class="col-3">Start At</div>
+                            <div class="col-9">
+                                <!-- Si está en modo vista, mostrar el valor como solo texto -->
+                                <input *ngIf="mode === 1"
+                                    type="text"
+                                    class="form-control"
+                                    [value]="formatDateToView(theFormGroup.value.startAt)"
+                                    readonly />
+                                <input *ngIf="mode === 3"
+                                    type="datetime-local"
+                                    class="form-control"
+                                    [value]="formatDateToView(theFormGroup.value.startAt)"/>
+                                <!-- Si no está en modo vista, usar el input editable -->
+                                <input *ngIf="mode === 2"
+                                    type="datetime-local"
+                                    class="form-control"
+                                    formControlName="startAt" />
+
+                                <div *ngIf="getTheFormGroup.startAt.errors && (getTheFormGroup.startAt.dirty || getTheFormGroup.startAt.touched || trySend)">
+                                <strong *ngIf="getTheFormGroup.startAt?.errors?.required" class="msnError">Requerido</strong>
                                 </div>
+                            </div>
                             </div>
                             <br>
                             <div class="row">
-                                <div class="col-3">EndAt</div>
-                                <div class="col-9">
-                                    <input type="datetime-local" class="form-control"
-                                        [disabled]="mode==1"
-                                        [min]="getTheFormGroup.startAt.value"
-                                        formControlName="endAt">
-                                    <div *ngIf="getTheFormGroup.endAt.errors && (getTheFormGroup.endAt.dirty || getTheFormGroup.endAt.touched || trySend)">
-                                        <strong *ngIf="getTheFormGroup.endAt?.errors?.required" class="msnError">Requerido</strong>
-                                        <strong *ngIf="getTheFormGroup.endAt?.errors?.min" class="msnError">Debe ser igual o después de StartAt</strong>
-                                    </div>
+                            <div class="col-3">End At</div>
+                            <div class="col-9">
+                                <!-- Si está en modo vista, mostrar el valor como solo texto -->
+                                <input *ngIf="mode === 1"
+                                    type="text"
+                                    class="form-control"
+                                    [value]="formatDateToView(theFormGroup.value.endAt)"
+                                    readonly />
+                                <input *ngIf="mode === 3"
+                                    type="datetime-local"
+                                    class="form-control"
+                                    [value]="formatDateToView(theFormGroup.value.endAt)"/>
+                                <!-- Si no está en modo vista, usar el input editable -->
+                                <input *ngIf="mode === 2"
+                                    type="datetime-local"
+                                    class="form-control"
+                                    formControlName="endAt" />
+
+                                <div *ngIf="getTheFormGroup.endAt.errors && (getTheFormGroup.endAt.dirty || getTheFormGroup.endAt.touched || trySend)">
+                                <strong *ngIf="getTheFormGroup.endAt?.errors?.required" class="msnError">Requerido</strong>
                                 </div>
+                            </div>
                             </div>
                             <br>
                             <div class="row">

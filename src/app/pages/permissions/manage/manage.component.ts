@@ -39,6 +39,12 @@ export class ManageComponent implements OnInit {
       this.getPermission(this.Permission.id)
     }
 
+    if (this.mode === 1) {
+    this.theFormGroup.get('url')?.disable();
+    this.theFormGroup.get('method')?.disable();
+    this.theFormGroup.get('entity')?.disable();
+  }
+
   }
   configFormGroup() {
     this.theFormGroup = this.theFormBuilder.group({
@@ -46,7 +52,8 @@ export class ManageComponent implements OnInit {
       // lista, serán las reglas
       id: [0,[]],
       url: ['', [Validators.required, Validators.minLength(2)]],
-      method: ['', [Validators.required, Validators.minLength(2)]]
+      method: ['', [Validators.required, Validators.minLength(2)]],
+      entity: ['', [Validators.required, Validators.minLength(2)]]
     })
   }
 
@@ -63,7 +70,8 @@ export class ManageComponent implements OnInit {
         this.theFormGroup.patchValue({
           id: this.Permission.id,
           url: this.Permission.url,
-          method: this.Permission.method
+          method: this.Permission.method,
+          entity: this.Permission.entity
         });
         
         console.log('Permission fetched successfully:', this.Permission);

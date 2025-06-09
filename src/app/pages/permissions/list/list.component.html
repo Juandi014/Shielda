@@ -1,4 +1,4 @@
-<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+<div class="header bg-purple pb-8 pt-5 pt-md-8">
 </div>
 <!-- Page content -->
 <div class="container-fluid mt--7">
@@ -16,12 +16,14 @@
                             <td>Id</td>
                             <td>Url</td>
                             <td>Method</td>
+                            <td>Entity</td>
                             <td>Opciones</td>
                         </tr>
                         <tr *ngFor="let permission of permissions">
                             <td>{{permission.id}}</td>
                             <td>{{permission.url}}</td>
                             <td>{{permission.method}}</td>
+                            <td>{{permission.entity}}</td>
                             <td>
                                 <button class="btn btn-warning" (click)="view(permission.id)">Ver</button>
                                 <button class="btn btn-primary" (click)="edit(permission.id)">Editar</button>

@@ -2,6 +2,6 @@ export class Device {
     id?: number;
     name?: string;
     ip?: string;
-    operatingSystem?: string;
-    userId? : number;
+    operating_system?: string;
+    user_id? : number;
 }

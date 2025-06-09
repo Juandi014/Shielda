@@ -1,7 +1,7 @@
 export class Password {
     id?: number;
     content?: string;
-    startAt?: Date;
-    endAt?: Date;
-    userId?: number;
+    startAt?: string;
+    endAt?: string;
+    user_id?: number;
 }
