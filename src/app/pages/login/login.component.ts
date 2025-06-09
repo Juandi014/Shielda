@@ -18,19 +18,43 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.user = { email: '', password: '' };
   }
 
-  login() {
-    this.securityService.login(this.user).subscribe({
-      next: (data) => {
-        this.securityService.saveSession(data);
-        this.router.navigateByUrl('/dashboard').then(() => {
-          window.location.reload(); // 🔄 fuerza la recarga para evitar overlays visuales
-        });
-      },
-      error: () => {
-        Swal.fire('Autenticación Inválida', 'Usuario o contraseña inválido', 'error');
+login() {
+  this.securityService.login(this.user).subscribe({
+    next: (data) => {
+      this.securityService.saveSession(data);
+      this.router.navigateByUrl('/dashboard').then(() => {
+        window.location.reload();
+      });
+    },
+    error: () => {
+      // ⛔ Falló el backend → intentamos login local
+      const localUsers = JSON.parse(localStorage.getItem('local_users') || '[]');
+      const userFound = localUsers.find((u: any) =>
+        u.email === this.user.email && u.password === this.user.password
+      );
+
+      if (userFound) {
+        const localUser: User = {
+          id: userFound.id || 0,
+          name: userFound.name,
+          email: userFound.email,
+          password: '',
+          token: 'local-token',
+          photoUrl: userFound.photoUrl || ''
+        };
+
+        localStorage.setItem('sesion', JSON.stringify(localUser));
+        this.securityService.setUser(localUser);
+
+        this.router.navigateByUrl('/dashboard').then(() => window.location.reload());
+      } else {
+        Swal.fire('Autenticación Inválida', 'Usuario o contraseña incorrectos', 'error');
       }
-    });
-  }
+    }
+  });
+}
+
+
 
   ngOnInit() {
     // Si ya hay sesión activa, redirigir automáticamente

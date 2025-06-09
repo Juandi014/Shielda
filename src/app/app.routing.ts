@@ -12,14 +12,7 @@ const routes: Routes = [
     path: 'users',
     loadChildren: () => import('./pages/users/users.module').then(m => m.UsersModule)
   },
-  {
-    path: 'profile/:id',
-    component: UserProfileComponent
-  },
-  {
-    path: 'profile/update/:id',
-    component: ProfileUpdateComponent
-  },
+ 
   {
     path: '',
     redirectTo: 'dashboard',
