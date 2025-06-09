@@ -29,6 +29,7 @@ export class SessionService {
   getUsers(): Observable<any[]> {
     return this.http.get<any[]>(`${environment.url_ms_cinema}/api/users`);
   }
-
-
+  getByUserId(userId: number): Observable<Session[]> {
+      return this.http.get<Session[]>(`${environment.url_ms_cinema}/api/sessions/user/${userId}`);
+    }
 }

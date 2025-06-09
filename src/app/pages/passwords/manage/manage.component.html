@@ -32,8 +32,14 @@
                                     [value]="userNameToShow"
                                     readonly />
 
+                                <input *ngIf="mode === 3"
+                                    type="text"
+                                    class="form-control"
+                                    [value]="userNameToShow"
+                                    readonly />
+
                                 <!-- Mostrar select si NO está en modo view -->
-                                <select *ngIf="mode !== 1"
+                                <select *ngIf="mode == 2"
                                         class="form-control"
                                         formControlName="user_id">
                                 <option value="">Seleccione un usuario</option>

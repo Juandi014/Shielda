@@ -32,7 +32,10 @@ const routes: Routes = [
   path: 'address/:userId',
   component: ManageComponent
 },
-
+{
+  path: 'devices',
+  loadChildren: () => import('./pages/devices/devices.module').then(m => m.DevicesModule)
+},
   {
     path: '',
     component: AuthLayoutComponent,

@@ -29,5 +29,7 @@ export class PasswordService {
   getUsers(): Observable<any[]> {
     return this.http.get<any[]>(`${environment.url_ms_cinema}/api/users`);
   }
-
+  getByUserId(userId: number): Observable<Password[]> {
+      return this.http.get<Password[]>(`${environment.url_ms_cinema}/api/passwords/user/${userId}`);
+    }
 }

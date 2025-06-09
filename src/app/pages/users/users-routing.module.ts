@@ -13,7 +13,7 @@ const routes: Routes = [
   { path: 'address/:id', component: ManageComponent }, // /users/address/123
   { path: 'edit/:id', component: EditComponent }, 
   { path: 'users/signature/:userId', component: ManageComponent }, // /users/signature/123
-  // /users/edit/123
+
 ];
 
 @NgModule({
