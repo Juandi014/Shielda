@@ -1,4 +1,4 @@
-<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+<div class="header bg-purple pb-8 pt-5 pt-md-8">
 </div>
 <!-- Page content -->
 <div class="container-fluid mt--7">
@@ -14,11 +14,15 @@
                     <table class="table">
                         <tr>
                             <td>Id</td>
+                            <td>User</td>
+                            <td>Question</td>
                             <td>Content</td>
                             <td>Opciones</td>
                         </tr>
                         <tr *ngFor="let answer of answers">
                             <td>{{answer.id}}</td>
+                            <td>{{getUserName(answer.user_id)}}</td>
+                            <td>{{getQuestionName(answer.security_question_id)}}</td>
                             <td>{{answer.content}}</td>
                             <td>
                                 <button class="btn btn-warning" (click)="view(answer.id)">Ver</button>

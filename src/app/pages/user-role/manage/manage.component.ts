@@ -6,7 +6,6 @@ import { UserService } from "src/app/services/user.service";
 import { RoleService } from "src/app/services/role.service";
 import { UserRoleService } from "src/app/services/user-role.service";
 import Swal from "sweetalert2";
-import { end } from "@popperjs/core";
 
 @Component({
   selector: "app-manage",
@@ -36,6 +35,16 @@ export class ManageComponent implements OnInit {
     this.UserRole = { id: 0 };
     this.configFormGroup();
   }
+
+  formatDate(date: Date): string {
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const seconds = date.getSeconds().toString().padStart(2, '0');
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
 
   ngOnInit(): void {
     const currentUrl = this.activatedRoute.snapshot.url.join("/");
@@ -71,14 +80,16 @@ export class ManageComponent implements OnInit {
   });
   }
 
-  formatDate(date: Date): string {
+  formatDateToView(value: any): string {
+  if (!value) return '';
+
+  const date = new Date(value);
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const day = date.getDate().toString().padStart(2, '0');
   const hours = date.getHours().toString().padStart(2, '0');
   const minutes = date.getMinutes().toString().padStart(2, '0');
-  const seconds = date.getSeconds().toString().padStart(2, '0');
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  return `${year}-${month}-${day} ${hours}:${minutes}`;
 }
 
   configFormGroup() {
@@ -93,18 +104,6 @@ export class ManageComponent implements OnInit {
     });
   }
 
-  formatDateToView(value: any): string {
-  if (!value) return '';
-
-  const date = new Date(value);
-  const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  return `${year}-${month}-${day} ${hours}:${minutes}`;
-}
-
   get getTheFormGroup() {
     return this.theFormGroup.controls;
   }
@@ -118,8 +117,8 @@ export class ManageComponent implements OnInit {
 
         this.theFormGroup.patchValue({
           id: this.UserRole.id,
-          startAt: this.UserRole.startAt,
-          endAt: this.UserRole.endAt,
+          startAt: this.UserRole.startAt ? new Date(this.UserRole.startAt) : null,
+          endAt: this.UserRole.endAt ? new Date(this.UserRole.endAt) : null,
           user_id: this.UserRole.user_id,
           role_id: this.UserRole.role_id,
         });
@@ -152,10 +151,10 @@ export class ManageComponent implements OnInit {
       });
       return;
     }
+    
     const formValue = { ...this.theFormGroup.value };
     formValue.startAt = this.formatDate(new Date(formValue.startAt));
     formValue.endAt = this.formatDate(new Date(formValue.endAt));
-
     this.UserRolesService.create(formValue.user_id, formValue.role_id, formValue).subscribe({
       next: (UserRole) => {
         console.log("UserRole created successfully:", UserRole);
@@ -172,34 +171,41 @@ export class ManageComponent implements OnInit {
     });
   }
   update() {
-    this.trySend = true;
-    if (this.theFormGroup.invalid) {
-      Swal.fire({
-        title: "Error!",
-        text: "Por favor, complete todos los campos requeridos.",
-        icon: "error",
-      });
-      return;
-    }
-    // Clona el valor del formulario
+  this.trySend = true;
+
+  if (this.theFormGroup.invalid) {
+    Swal.fire({
+      title: "Error!",
+      text: "Por favor, complete todos los campos requeridos.",
+      icon: "error",
+    });
+    return;
+  }
+
+  // Clona el valor del formulario
   const formValue = { ...this.theFormGroup.value };
 
-  // Formatea la fecha startAt para el backend
-  formValue.startAt = this.formatDate(new Date(formValue.startAt));
-  formValue.endAt = this.formatDate(new Date(formValue.endAt));
-    this.UserRolesService.update(formValue).subscribe({
-      next: (UserRole) => {
-        console.log("UserRole updated successfully:", UserRole);
-        Swal.fire({
-          title: "Actualizado!",
-          text: "Registro actualizado correctamente.",
-          icon: "success",
-        });
-        this.router.navigate(["/user-roles/list"]);
-      },
-      error: (error) => {
-        console.error("Error updating UserRole:", error);
-      },
-    });
-  }
+  // Formatea las fechas en formato ISO (esperado por el backend para update)
+  formValue.startAt = new Date(formValue.startAt).toISOString();
+  formValue.endAt = new Date(formValue.endAt).toISOString();
+
+  console.log("Enviando datos para actualización:", formValue);
+
+  this.UserRolesService.update(formValue).subscribe({
+    next: (UserRole) => {
+      console.log("UserRole updated successfully:", UserRole);
+      Swal.fire({
+        title: "Actualizado!",
+        text: "Registro actualizado correctamente.",
+        icon: "success",
+      });
+      this.router.navigate(["/user-roles/list"]);
+    },
+    error: (error) => {
+      console.error("Error updating UserRole:", error);
+      Swal.fire("Error", "No se pudo actualizar el registro.", "error");
+    },
+  });
+}
+
 }

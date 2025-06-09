@@ -13,11 +13,19 @@ declare interface RouteInfo {
 
 export const ROUTES: RouteInfo[] = [
   { path: '/dashboard', title: 'Dashboard', icon: 'ni-tv-2 text-primary', class: '', type: 2 },
-  { path: '/icons', title: 'Icons', icon: 'ni-planet text-blue', class: '', type: 1 },
-  { path: '/maps', title: 'Maps', icon: 'ni-pin-3 text-orange', class: '', type: 1 },
   { path: '/user-profile', title: 'User profile', icon: 'ni-single-02 text-yellow', class: '', type: 1 },
- { path: '/users', title: 'Users', icon: 'ni-circle-08 text-purple', class: '', type: 1 }, // ✅ NUEVO ITEM
-  { path: '/tables', title: 'Tables', icon: 'ni-bullet-list-67 text-red', class: '', type: 1 },
+  { path: '/users', title: 'Users', icon: 'ni-circle-08 text-purple', class: '', type: 1 }, // ✅ NUEVO ITEM
+  { path: '/addresses/list', title: 'Addresses', icon: 'ni-map-big text-orange', class: '', type: 1 },
+  { path: '/digital-signatures/list', title: 'Digital Signatures', icon: 'ni-paper-diploma text-pink', class: '', type: 1 },
+  { path: '/passwords/list', title: 'Passwords', icon: 'ni-key-25 text-danger', class: '', type: 1 },
+  { path: '/devices/list', title: 'Devices', icon: 'ni-laptop text-success', class: '', type: 1 },
+  { path: '/sessions/list', title: 'Sessions', icon: 'ni-time-alarm text-info', class: '', type: 1 },
+  { path: '/roles/list', title: 'Roles', icon: 'ni-badge text-indigo', class: '', type: 1 },
+  { path: '/permissions/list', title: 'Permissions', icon: 'ni-lock-circle-open text-dark', class: '', type: 1 },
+  { path: '/security-questions/list', title: 'Security Questions', icon: 'ni-support-16 text-secondary', class: '', type: 1 },
+  { path: '/answers/list', title: 'Answers', icon: 'ni-chat-round text-teal', class: '', type: 1 },
+  { path: '/user-roles/list', title: 'User Roles', icon: 'ni-badge text-warning', class: '', type: 1 },
+  { path: '/role-permissions/list', title: 'Role Permissions', icon: 'ni-settings-gear-65 text-primary', class: '', type: 1 },
   { path: '/login', title: 'Login', icon: 'ni-key-25 text-info', class: '', type: 0 },
   { path: '/register', title: 'Register', icon: 'ni-circle-08 text-pink', class: '', type: 0 },
 ];

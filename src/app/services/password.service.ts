@@ -26,5 +26,8 @@ export class PasswordService {
   delete(id: number) {
     return this.http.delete<Password>(`${environment.url_ms_cinema}/api/passwords/${id}`);
   }
+  getUsers(): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.url_ms_cinema}/api/users`);
+  }
 
 }

@@ -28,13 +28,13 @@ export class ListComponent implements OnInit {
   }
 
   loadUsers() {
-    this.UserRolesService.getUsers().subscribe(users => {
+    this.userRolesService.getUsers().subscribe(users => {
       this.users = users;
     });
   }
 
   loadRoles() {
-    this.UserRolesService.getRoles().subscribe(roles => {
+    this.userRolesService.getRoles().subscribe(roles => {
       this.roles = roles;
     });
   }

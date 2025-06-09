@@ -1,4 +1,4 @@
-<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+<div class="header bg-purple pb-8 pt-5 pt-md-8">
 </div>
 <!-- Page content -->
 <div class="container-fluid mt--7">
@@ -14,6 +14,7 @@
                     <table class="table">
                         <tr>
                             <td>Id</td>
+                            <td>User</td>
                             <td>Token</td>
                             <td>Expiration</td>
                             <td>FACode</td>
@@ -22,6 +23,7 @@
                         </tr>
                         <tr *ngFor="let session of sessions">
                             <td>{{session.id}}</td>
+                            <td>{{getUserName(session.user_id)}}</td>
                             <td>{{session.token}}</td>
                             <td>{{session.expiration}}</td>
                             <td>{{session.FACode}}</td>

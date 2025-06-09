@@ -11,12 +11,25 @@ import Swal from 'sweetalert2';
 })
 export class ListComponent implements OnInit {
   devices: Device[] = [];
+  users: any[] = []; // Lista de usuarios
   constructor(private devicesService:DeviceService,
     private router:Router
   ) { }
 
   ngOnInit(): void {
     this.list();
+    this.loadUsers();
+  }
+
+  loadUsers() {
+    this.devicesService.getUsers().subscribe(users => {
+      this.users = users;
+    });
+  }
+
+  getUserName(userId: number): string {
+    const user = this.users.find(u => u.id === userId);
+    return user ? user.name : 'Desconocido';
   }
 
   list(){

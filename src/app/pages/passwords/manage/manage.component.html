@@ -1,4 +1,4 @@
-<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+<div class="header bg-purple pb-8 pt-5 pt-md-8">
 </div>
 <!-- Page content -->
 <div class="container-fluid mt--7">
@@ -51,8 +51,8 @@
                                 <div class="col-3">Content</div>
                                 <div class="col-9">
                                     <input type="text" class="form-control" 
-                                        [disabled]="mode==1"
-                                        [value]="mode === 1 ? '********' : theFormGroup.get('content')?.value">
+                                        [disabled]="mode==1" formControlName="content">
+                                        
                                     <div
                                         *ngIf="getTheFormGroup.content.errors && (getTheFormGroup.content.dirty || getTheFormGroup.content.touched || trySend)">
                                         <strong *ngIf="getTheFormGroup.content?.errors?.required"

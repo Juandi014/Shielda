@@ -1,4 +1,4 @@
-<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+<div class="header bg-purple pb-8 pt-5 pt-md-8">
 </div>
 <!-- Page content -->
 <div class="container-fluid mt--7">
@@ -105,12 +105,12 @@
                                 <input *ngIf="mode === 1"
                                     type="text"
                                     class="form-control"
-                                    [value]="formatDateToView(theFormGroup.value.endAt)"
+                                    [value]="formatDateToView(theFormGroup.getRawValue().endAt)"
                                     readonly />
                                 <input *ngIf="mode === 3"
                                     type="datetime-local"
                                     class="form-control"
-                                    [value]="formatDateToView(theFormGroup.value.endAt)"/>
+                                    [value]="formatDateToView(theFormGroup.getRawValue().endAt)"/>
                                 <!-- Si no está en modo vista, usar el input editable -->
                                 <input *ngIf="mode === 2"
                                     type="datetime-local"
