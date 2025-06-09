@@ -1,88 +1,67 @@
 <div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
 </div>
+
 <!-- Page content -->
 <div class="container-fluid mt--7">
-  <!-- Table -->
   <div class="row">
     <div class="col">
       <div class="card shadow">
         <div class="card-header bg-transparent">
-          <h3 class="mb-0" *ngIf="mode==1">Detalle</h3>
-          <h3 class="mb-0" *ngIf="mode==2">Crear</h3>
-          <h3 class="mb-0" *ngIf="mode==3">Actualizar</h3>
+          <h1 class="mb-0 text-center">
+            {{ theFormGroup.get('userName')?.value }} - Address
+          </h1>
         </div>
+
         <div class="card-body container">
           <div class="row">
+
+            <!-- Columna del mapa -->
+            <div class="col-md-6 mb-4">
+              <div id="map" style="height: 420px; width: 100%; border-radius: 8px;"></div>
+            </div>
+
             <!-- Columna del formulario -->
             <div class="col-md-6">
-              <form class="form" [formGroup]="theFormGroup">
-                <div class="row">
-                  <div class="col-3">ID</div>
-                  <div class="col-9">
-                    <input type="text" class="form-control" formControlName="id" disabled>
+              <form [formGroup]="theFormGroup" class="form">
+                <div class="form-group">
+                  <label for="street">Street</label>
+                  <input type="text" id="street" formControlName="street" class="form-control"
+                    [disabled]="mode === 1">
+                  <div *ngIf="getTheFormGroup.street.errors && (getTheFormGroup.street.dirty || getTheFormGroup.street.touched || trySend)">
+                    <small class="text-danger" *ngIf="getTheFormGroup.street.errors?.required">Requerido</small>
+                    <small class="text-danger" *ngIf="getTheFormGroup.street.errors?.minlength">Inválido</small>
                   </div>
                 </div>
-                <br>
-                <div class="row">
-                  <div class="col-3">Street</div>
-                  <div class="col-9">
-                    <input type="text" class="form-control" [disabled]="mode==1" formControlName="street">
-                    <div
-                      *ngIf="getTheFormGroup.street.errors && (getTheFormGroup.street.dirty || getTheFormGroup.street.touched || trySend)">
-                      <strong *ngIf="getTheFormGroup.street?.errors?.required" class="msnError">Requerido</strong>
-                      <strong *ngIf="getTheFormGroup.street?.errors?.minlength" class="msnError">Inválido</strong>
-                    </div>
+
+                <div class="form-group">
+                  <label for="number">Number</label>
+                  <input type="text" id="number" formControlName="number" class="form-control"
+                    [disabled]="mode === 1">
+                  <div *ngIf="getTheFormGroup.number.errors && (getTheFormGroup.number.dirty || getTheFormGroup.number.touched || trySend)">
+                    <small class="text-danger" *ngIf="getTheFormGroup.number.errors?.required">Requerido</small>
+                    <small class="text-danger" *ngIf="getTheFormGroup.number.errors?.minlength">Inválido</small>
                   </div>
                 </div>
-                <br>
-                <div class="row">
-                  <div class="col-3">Number</div>
-                  <div class="col-9">
-                    <input type="text" class="form-control" [disabled]="mode==1" formControlName="number">
-                    <div *ngIf="getTheFormGroup.number.errors && (getTheFormGroup.number.dirty || getTheFormGroup.number.touched || trySend)">
-                      <strong *ngIf="getTheFormGroup.number?.errors?.required" class="msnError">Requerido</strong>
-                      <strong *ngIf="getTheFormGroup.number?.errors?.minlength" class="msnError">Inválido</strong>
-                    </div>
-                  </div>
+
+                <div class="form-group">
+                  <label for="latitude">Latitude</label>
+                  <input type="number" id="latitude" formControlName="latitude" class="form-control"
+                    [disabled]="mode === 1">
                 </div>
-                <br>
-                <div class="row">
-                  <div class="col-3">Latitude</div>
-                  <div class="col-9">
-                    <input type="text" class="form-control" [disabled]="mode==1" formControlName="latitude">
-                    <div *ngIf="getTheFormGroup.latitude.errors && (getTheFormGroup.latitude.dirty || getTheFormGroup.latitude.touched || trySend)">
-                      <strong *ngIf="getTheFormGroup.latitude?.errors?.required" class="msnError">Requerido</strong>
-                      <strong *ngIf="getTheFormGroup.latitude?.errors?.minlength" class="msnError">Inválido</strong>
-                    </div>
-                  </div>
+
+                <div class="form-group">
+                  <label for="longitude">Longitude</label>
+                  <input type="number" id="longitude" formControlName="longitude" class="form-control"
+                    [disabled]="mode === 1">
                 </div>
-                <br>
-                <div class="row">
-                  <div class="col-3">Longitude</div>
-                  <div class="col-9">
-                    <input type="text" class="form-control" [disabled]="mode==1" formControlName="longitude">
-                    <div *ngIf="getTheFormGroup.longitude.errors && (getTheFormGroup.longitude.dirty || getTheFormGroup.longitude.touched || trySend)">
-                      <strong *ngIf="getTheFormGroup.longitude?.errors?.required" class="msnError">Requerido</strong>
-                      <strong *ngIf="getTheFormGroup.longitude?.errors?.minlength" class="msnError">Inválido</strong>
-                    </div>
-                  </div>
-                </div>
-                <br>
-                <div class="row">
-                  <div class="col-3"></div>
-                  <div class="col-9">
-                    <button type="button" class="btn btn-primary btn-block" (click)="back()" *ngIf="mode==1">Regresar</button>
-                    <button type="button" class="btn btn-success btn-block" (click)="create()" *ngIf="mode==2">Crear</button>
-                    <button type="button" class="btn btn-warning btn-block" (click)="update()" *ngIf="mode==3">Actualizar</button>
-                  </div>
+
+                <div class="form-group mt-4">
+                  <button type="button" class="btn btn-success btn-block" *ngIf="mode === 2" (click)="create()">Crear</button>
+                  <button type="button" class="btn btn-warning btn-block" *ngIf="mode === 3" (click)="update()">Actualizar</button>
                 </div>
               </form>
             </div>
 
-            <!-- Columna del mapa -->
-            <div class="col-md-6">
-              <div id="map" style="height: 400px; width: 100%; border-radius: 8px;"></div>
-            </div>
           </div>
         </div>
       </div>

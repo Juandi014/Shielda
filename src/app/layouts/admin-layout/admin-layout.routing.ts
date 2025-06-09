@@ -27,15 +27,17 @@ export const AdminLayoutRoutes: Routes = [
             },
         ]
     },
+   
+{
+  path: 'addresses',
+  children: [
     {
-        path: 'addresses',
-        children: [
-            {
-                path: '',
-                loadChildren: () => import('src/app/pages/addresses/addresses.module').then(m => m.AddressesModule)
-            },
-        ]
-    },
+      path: '',
+      loadChildren: () => import('src/app/pages/addresses/addresses.module').then(m => m.AddressesModule)
+    }
+  ]
+},
+
     {
         path: 'user-roles',
         children: [
