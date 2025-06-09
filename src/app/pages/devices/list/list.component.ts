@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { Device } from 'src/app/models/device.model';
 import { DeviceService } from 'src/app/services/device.service';
@@ -12,13 +13,36 @@ import Swal from 'sweetalert2';
 export class ListComponent implements OnInit {
   devices: Device[] = [];
   users: any[] = []; // Lista de usuarios
+  user_id?: number;
   constructor(private devicesService:DeviceService,
-    private router:Router
+    private router:Router,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
-    this.list();
     this.loadUsers();
+
+    this.route.params.subscribe(params => {
+      this.user_id = params['user_id'] ? +params['user_id'] : undefined;
+
+      if (this.user_id) {
+        this.listByUser(this.user_id);
+      } else {
+        this.list();
+      }
+    });
+  }
+
+
+  listByUser(user_id: number) {
+    this.devicesService.getByUserId(user_id).subscribe({
+      next: (devices) => {
+        this.devices = devices;
+      },
+      error: () => {
+        Swal.fire('Error', 'No se pudieron cargar los dispositivos del usuario', 'error');
+      }
+    });
   }
 
   loadUsers() {
@@ -27,8 +51,8 @@ export class ListComponent implements OnInit {
     });
   }
 
-  getUserName(userId: number): string {
-    const user = this.users.find(u => u.id === userId);
+  getUserName(user_id: number): string {
+    const user = this.users.find(u => u.id === user_id);
     return user ? user.name : 'Desconocido';
   }
 

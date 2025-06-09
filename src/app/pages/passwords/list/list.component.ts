@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Password } from 'src/app/models/password.model';
 import { PasswordService } from 'src/app/services/password.service';
+import { ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -12,14 +13,37 @@ import Swal from 'sweetalert2';
 export class ListComponent implements OnInit {
   passwords: Password[] = [];
   users: any[] = []; // Lista de usuarios
+  user_id?: number;
   constructor(private passwordsService:PasswordService,
-    private router:Router
+    private router:Router,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
-    this.list();
-    this.loadUsers();
-  }
+      this.loadUsers();
+  
+      this.route.params.subscribe(params => {
+        this.user_id = params['user_id'] ? +params['user_id'] : undefined;
+  
+        if (this.user_id) {
+          this.listByUser(this.user_id);
+        } else {
+          this.list();
+        }
+      });
+    }
+  
+  
+    listByUser(user_id: number) {
+      this.passwordsService.getByUserId(user_id).subscribe({
+        next: (passwords) => {
+          this.passwords = passwords;
+        },
+        error: () => {
+          Swal.fire('Error', 'No se pudieron cargar los dispositivos del usuario', 'error');
+        }
+      });
+    }
 
   loadUsers() {
     this.passwordsService.getUsers().subscribe(users => {

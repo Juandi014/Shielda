@@ -29,5 +29,8 @@ export class DeviceService {
   getUsers(): Observable<any[]> {
     return this.http.get<any[]>(`${environment.url_ms_cinema}/api/users`);
   }
+  getByUserId(userId: number): Observable<Device[]> {
+    return this.http.get<Device[]>(`${environment.url_ms_cinema}/api/devices/user/${userId}`);
+  }
 
 }
