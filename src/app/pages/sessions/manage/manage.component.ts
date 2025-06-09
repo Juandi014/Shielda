@@ -19,6 +19,7 @@ export class ManageComponent implements OnInit {
   trySend: boolean;
   userId: number = 0; // Asignar un valor por defecto
   users: any[] = []; // Lista de usuarios
+  userNameToShow: string = '';
   minDate: string; // Para el campo de fecha, si es necesario
   constructor(private activatedRoute: ActivatedRoute,
     private SessionsService: SessionService,
@@ -51,10 +52,21 @@ export class ManageComponent implements OnInit {
       this.mode = 3;
     }
 
+    if (this.mode === 1) {
+    this.theFormGroup.get('token')?.disable();
+    this.theFormGroup.get('FACode')?.disable();
+    this.theFormGroup.get('state')?.disable();
+    }
+    
     // cargar los usuarios
         this.UsersService.list().subscribe({
           next: (data) => {
             this.users = data;
+            // Cargar sesión solo después de tener los usuarios
+    if (this.activatedRoute.snapshot.params.id) {
+      this.Session.id = this.activatedRoute.snapshot.params.id;
+      this.getSession(this.Session.id);
+    }
           },
           error: () => {
             Swal.fire("Error", "No se pudieron cargar los usuarios", "error");
@@ -68,31 +80,18 @@ export class ManageComponent implements OnInit {
 
   }
 
-  loadUserAndInitForm() {
-        // Ejemplo: obtén el userId desde parámetros (o desde un servicio Auth)
-        const userId = +this.activatedRoute.snapshot.params.userId || 0;
-    
-        if (!userId) {
-          Swal.fire("Error", "No se encontró el usuario para asignar dirección", "error");
-          this.router.navigate(["/users/list"]);
-          return;
-        }
-    
-        this.UsersService.getById(userId).subscribe({
-          next: (user) => {
-            // Inicializa el form con userId y userName
-            this.theFormGroup.patchValue({
-              userId: user.id,
-              userName: user.name,
-              // los otros campos vacíos o con valores por defecto
-            });
-          },
-          error: () => {
-            Swal.fire("Error", "No se pudo cargar el usuario", "error");
-            this.router.navigate(["/users/list"]);
-          },
-        });
-  }
+  formatDateToView(value: any): string {
+  if (!value) return '';
+
+  const date = new Date(value);
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  return `${year}-${month}-${day} ${hours}:${minutes}`;
+}
+
 
   configFormGroup() {
     this.theFormGroup = this.theFormBuilder.group({
@@ -107,6 +106,10 @@ export class ManageComponent implements OnInit {
     })
   }
 
+  getUserNameById(id: number): string {
+    const user = this.users.find(u => u.id === id);
+    return user ? user.name : '';
+  }
 
   get getTheFormGroup() {
     return this.theFormGroup.controls
@@ -123,8 +126,13 @@ export class ManageComponent implements OnInit {
           expiration: this.Session.expiration ? new Date(this.Session.expiration) : null,
           FACode: this.Session.FACode,
           state: this.Session.state,
+          userId: this.Session.userId,
         });
         
+        // Buscar y guardar el nombre del usuario para mostrarlo en modo "view"
+      const foundUser = this.users.find(u => u.id === this.Session.userId);
+      this.userNameToShow = foundUser ? foundUser.name : '';
+
         console.log('Session fetched successfully:', this.Session);
       },
       error: (error) => {
@@ -133,8 +141,9 @@ export class ManageComponent implements OnInit {
     });
   }
   back() {
-    this.router.navigate(['/Sessions/list']);
+    this.router.navigate(['/sessions/list']);
   }
+
 
   create() {
     this.trySend = true;
@@ -158,7 +167,7 @@ export class ManageComponent implements OnInit {
           text: 'Registro creado correctamente.',
           icon: 'success',
         })
-        this.router.navigate(['/Sessions/list']);
+        this.router.navigate(['/sessions/list']);
       },
       error: (error) => {
         console.error('Error creating Session:', error);
@@ -175,6 +184,7 @@ export class ManageComponent implements OnInit {
       })
       return;
     }
+    console.log(this.theFormGroup.value);
     this.SessionsService.update(this.theFormGroup.value).subscribe({
       next: (Session) => {
         console.log('Session updated successfully:', Session);
@@ -183,7 +193,7 @@ export class ManageComponent implements OnInit {
           text: 'Registro actualizado correctamente.',
           icon: 'success',
         })
-        this.router.navigate(['/Sessions/list']);
+        this.router.navigate(['/sessions/list']);
       },
       error: (error) => {
         console.error('Error updating Session:', error);

@@ -25,6 +25,6 @@ export class RolePermissionService {
 
   delete(id: number) {
     return this.http.delete<RolePermission>(`${environment.url_ms_cinema}/api/role-permissions/${id}`);
-  }
+  } 
 
 }

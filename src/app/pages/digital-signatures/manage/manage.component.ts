@@ -50,6 +50,17 @@ export class ManageComponent implements OnInit {
       this.mode = 3;
     }
 
+    this.userId = +this.activatedRoute.snapshot.params.userId || 0; // Obtener userId de la ruta si existe
+    this.DigitalSignature.id = +this.activatedRoute.snapshot.params.id || 0; // Obtener id firma si existe
+    
+    if (this.userId) {
+      // Cargar la firma digital asociada a ese userId
+      this.loadSignatureByUserId(this.userId);
+    } else if (this.DigitalSignature.id) {
+      // Cargar firma por id (modo view/update)
+      this.getDigitalSignature(this.DigitalSignature.id);
+    }
+
     // cargar los usuarios
     this.UsersService.list().subscribe({
       next: (data) => {
@@ -94,6 +105,22 @@ export class ManageComponent implements OnInit {
       },
     });
   }
+
+  loadSignatureByUserId(userId: number) {
+  this.DigitalSignaturesService.viewByUserId(userId).subscribe({
+    next: (signature) => {
+      this.DigitalSignature = signature;
+      this.theFormGroup.patchValue({
+        id: signature.id,
+        photo: signature.photo,
+        userId: signature.userId,
+      });
+    },
+    error: () => {
+      Swal.fire("Error", "No se encontró firma digital para este usuario", "error");
+    },
+  });
+}
   configFormGroup() {
     this.theFormGroup = this.theFormBuilder.group({
       // primer elemento del vector, valor por defecto

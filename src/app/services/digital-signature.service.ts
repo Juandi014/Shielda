@@ -21,9 +21,10 @@ export class DigitalSignatureService {
   update(theDigitalSignature: DigitalSignature): Observable<DigitalSignature> {
     return this.http.put<DigitalSignature>(`${environment.url_ms_cinema}/api/digital-signatures/${theDigitalSignature.id}`, theDigitalSignature);
   }
-
   delete(id: number) {
     return this.http.delete<DigitalSignature>(`${environment.url_ms_cinema}/api/digital-signatures/${id}`);
   }
-
+  viewByUserId(userId: number): Observable<DigitalSignature> {
+  return this.http.get<DigitalSignature>(`${environment.url_ms_cinema}/api/digital-signatures/user/${userId}`);
+}
 }
