@@ -76,7 +76,7 @@ this.AddressesService.getByUserId(this.userId).subscribe({
       return;
     }
 
-    this.UsersService.view(userId).subscribe({
+    this.UsersService.getById(userId).subscribe({
       next: (user) => {
         this.theFormGroup.patchValue({
           userId: user.id,

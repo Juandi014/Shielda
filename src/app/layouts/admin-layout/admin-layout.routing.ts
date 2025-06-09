@@ -73,5 +73,50 @@ export const AdminLayoutRoutes: Routes = [
                 loadChildren: () => import('src/app/pages/sessions/sessions.module').then(m => m.SessionsModule)
             },
         ]
+    },
+    {
+        path: 'security-questions',
+        children: [
+            {
+                path: '',
+                loadChildren: () => import('src/app/pages/security-questions/security-questions.module').then(m => m.SecurityQuestionsModule)
+            },
+        ]
+    },
+    {
+        path: 'devices',
+        children: [
+            {
+                path: '',
+                loadChildren: () => import('src/app/pages/devices/devices.module').then(m => m.DevicesModule)
+            },
+        ]
+    },
+    {
+        path: 'digital-signatures',
+        children: [
+            {
+                path: '',
+                loadChildren: () => import('src/app/pages/digital-signatures/digital-signatures.module').then(m => m.DigitalSignaturesModule)
+            },
+        ]
+    },
+    {
+        path: 'answers',
+        children: [
+            {
+                path: '',
+                loadChildren: () => import('src/app/pages/answers/answers.module').then(m => m.AnswersModule)
+            },
+        ]
+    },
+    {
+        path: 'role-permissions',
+        children: [
+            {
+                path: '',
+                loadChildren: () => import('src/app/pages/role-permissions/role-permissions.module').then(m => m.RolePermissionsModule)
+            },
+        ]
     }
 ];

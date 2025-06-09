@@ -36,7 +36,7 @@ export class ListComponent implements OnInit {
     this.router.navigate(['/sessions/update/'+id]);
   }
   delete(id:number){
-    console.log("Delete role with id:", id);
+    console.log("Delete session with id:", id);
     Swal.fire({
       title: 'Eliminar',
       text: "Está seguro que quiere eliminar el registro?",
