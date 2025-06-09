@@ -92,6 +92,38 @@
                   </div>
                 </div>
               </div>
+              <br>
+              <div class="row">
+                <div class="col-3">Entity</div>
+                <div class="col-9">
+                  <input
+                    type="text"
+                    class="form-control"
+                    [disabled]="mode == 1"
+                    formControlName="entity"
+                  />
+
+                  <div
+                    *ngIf="
+                      getTheFormGroup.entity.errors &&
+                      (getTheFormGroup.entity.dirty ||
+                        getTheFormGroup.entity.touched ||
+                        trySend)
+                    "
+                  >
+                    <strong
+                      *ngIf="getTheFormGroup.entity?.errors?.required"
+                      class="msnError"
+                      >Requerido</strong
+                    >
+                    <strong
+                      *ngIf="getTheFormGroup.entity?.errors?.minlength"
+                      class="msnError"
+                      >Inválido
+                    </strong>
+                  </div>
+                </div>
+              </div>
 
               <br />
               <div class="row">

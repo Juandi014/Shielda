@@ -17,7 +17,7 @@ export class ManageComponent implements OnInit {
   Session: Session;
   theFormGroup: FormGroup; // Policía de formulario
   trySend: boolean;
-  userId: number = 0; // Asignar un valor por defecto
+  user_id: number = 0; // Asignar un valor por defecto
   users: any[] = []; // Lista de usuarios
   userNameToShow: string = '';
   minDate: string; // Para el campo de fecha, si es necesario
@@ -58,25 +58,20 @@ export class ManageComponent implements OnInit {
     this.theFormGroup.get('state')?.disable();
     }
     
-    // cargar los usuarios
-        this.UsersService.list().subscribe({
-          next: (data) => {
-            this.users = data;
-            // Cargar sesión solo después de tener los usuarios
-    if (this.activatedRoute.snapshot.params.id) {
-      this.Session.id = this.activatedRoute.snapshot.params.id;
-      this.getSession(this.Session.id);
-    }
-          },
-          error: () => {
-            Swal.fire("Error", "No se pudieron cargar los usuarios", "error");
-          },
-        });
-    
+    this.UsersService.list().subscribe({
+      next: (data) => {
+        this.users = data;
+
+        // Cargar sesión solo después de tener los usuarios
         if (this.activatedRoute.snapshot.params.id) {
           this.Session.id = this.activatedRoute.snapshot.params.id;
           this.getSession(this.Session.id);
         }
+      },
+      error: () => {
+        Swal.fire("Error", "No se pudieron cargar los usuarios", "error");
+      },
+    });
 
   }
 
@@ -102,7 +97,7 @@ export class ManageComponent implements OnInit {
       expiration: [null, Validators.required],
       FACode: ['', [Validators.required, Validators.minLength(2)]],
       state: ['', [Validators.required, Validators.minLength(2)]],
-      userId: [null, [Validators.required]],
+      user_id: [null, [Validators.required]],
     })
   }
 
@@ -126,11 +121,12 @@ export class ManageComponent implements OnInit {
           expiration: this.Session.expiration ? new Date(this.Session.expiration) : null,
           FACode: this.Session.FACode,
           state: this.Session.state,
-          userId: this.Session.userId,
+          user_id: this.Session.user_id,
         });
         
+
         // Buscar y guardar el nombre del usuario para mostrarlo en modo "view"
-      const foundUser = this.users.find(u => u.id === this.Session.userId);
+      const foundUser = this.users.find(u => u.id === this.Session.user_id);
       this.userNameToShow = foundUser ? foundUser.name : '';
 
         console.log('Session fetched successfully:', this.Session);
@@ -159,7 +155,7 @@ export class ManageComponent implements OnInit {
     const formValue = { ...this.theFormGroup.value };
     formValue.expiration = this.formatDate(new Date(formValue.expiration));
 
-    this.SessionsService.create(formValue.userId, formValue).subscribe({
+    this.SessionsService.create(formValue.user_id, formValue).subscribe({
       next: (Session) => {
         console.log('Session created successfully:', Session);
         Swal.fire({
@@ -175,30 +171,38 @@ export class ManageComponent implements OnInit {
     });
   }
   update() {
-    this.trySend = true;
-    if (this.theFormGroup.invalid) {
-      Swal.fire({
-        title: 'Error!',
-        text: 'Por favor, complete todos los campos requeridos.',
-        icon: 'error',
-      })
-      return;
-    }
-    console.log(this.theFormGroup.value);
-    this.SessionsService.update(this.theFormGroup.value).subscribe({
-      next: (Session) => {
-        console.log('Session updated successfully:', Session);
-        Swal.fire({
-          title: 'Actualizado!',
-          text: 'Registro actualizado correctamente.',
-          icon: 'success',
-        })
-        this.router.navigate(['/sessions/list']);
-      },
-      error: (error) => {
-        console.error('Error updating Session:', error);
-      }
+  this.trySend = true;
+  if (this.theFormGroup.invalid) {
+    Swal.fire({
+      title: 'Error!',
+      text: 'Por favor, complete todos los campos requeridos.',
+      icon: 'error',
     });
+    return;
   }
+
+  // Clona el valor del formulario
+  const formValue = { ...this.theFormGroup.value };
+
+  // Formatea la fecha expiration para el backend
+  formValue.expiration = this.formatDate(new Date(formValue.expiration));
+
+  console.log(formValue);
+
+  this.SessionsService.update(formValue).subscribe({
+    next: (Session) => {
+      console.log('Session updated successfully:', Session);
+      Swal.fire({
+        title: 'Actualizado!',
+        text: 'Registro actualizado correctamente.',
+        icon: 'success',
+      });
+      this.router.navigate(['/sessions/list']);
+    },
+    error: (error) => {
+      console.error('Error updating Session:', error);
+    }
+  });
+}
 
 }

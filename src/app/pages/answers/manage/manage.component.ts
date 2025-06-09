@@ -17,10 +17,12 @@ export class ManageComponent implements OnInit {
   Answer: Answer;
   theFormGroup: FormGroup; // Policía de formulario
   trySend: boolean;
-  userId: number = 0; // Asignar un valor por defecto
-  questionId: number = 0; // Asignar un valor por defecto
+  user_id: number = 0; // Asignar un valor por defecto
+  security_question_id: number = 0; // Asignar un valor por defecto
   users: any[] = []; // Lista de usuarios
   questions: any[] = []; // Lista de preguntas, si es necesario
+  userNameToShow: string = '';
+  userQuestionToShow: string = '';
   constructor(
     private activatedRoute: ActivatedRoute,
     private AnswersService: AnswerService,
@@ -48,30 +50,29 @@ export class ManageComponent implements OnInit {
       this.theFormGroup.get('content')?.disable();
     }
 
-    // cargar los usuarios
-    this.UsersService.list().subscribe({
-      next: (data) => {
-        this.users = data;
-      },
-      error: () => {
-        Swal.fire("Error", "No se pudieron cargar los usuarios", "error");
-      },
-    });
+    // cargar los usuarios y preguntas primero
+  Promise.all([
+    this.UsersService.list().toPromise(),
+    this.SecurityQuestionsService.list().toPromise()
+  ])
+  .then(([usersData, questionsData]) => {
+    this.users = usersData;
+    this.questions = questionsData;
 
-    // cargar las preguntas
-    this.SecurityQuestionsService.list().subscribe({
-      next: (data) => {
-        this.questions = data;
-      },
-      error: () => {
-        Swal.fire("Error", "No se pudieron cargar las preguntas", "error");
-      },
-    });
-
+    // Solo ahora cargamos la respuesta
     if (this.activatedRoute.snapshot.params.id) {
       this.Answer.id = this.activatedRoute.snapshot.params.id;
       this.getAnswer(this.Answer.id);
     }
+  })
+  .catch(() => {
+    Swal.fire("Error", "No se pudieron cargar los datos", "error");
+  });
+  }
+
+  getUserNameById(id: number): string {
+    const user = this.users.find(u => u.id === id);
+    return user ? user.name : '';
   }
 
   configFormGroup() {
@@ -80,8 +81,8 @@ export class ManageComponent implements OnInit {
       // lista, serán las reglas
       id: [0, []],
       content: ["", [Validators.required, Validators.minLength(2)]],
-      userId: [null, [Validators.required]],
-      questionId: [null, [Validators.required]],
+      user_id: [null, [Validators.required]],
+      security_question_id: [null, [Validators.required]],
     });
   }
 
@@ -94,14 +95,23 @@ export class ManageComponent implements OnInit {
       next: (response) => {
         this.Answer = response;
 
+        console.log("Fetched Answer:", this.Answer);
+
         this.theFormGroup.patchValue({
           id: this.Answer.id,
           content: this.Answer.content,
-          userId: this.Answer.userId,
-          questionId: this.Answer.questionId,
+          user_id: this.Answer.user_id,
+          security_question_id: this.Answer.security_question_id,
         });
 
-        console.log("Answer fetched successfully:", this.Answer);
+        // Buscar y guardar el nombre del usuario para mostrarlo en modo "view"
+      const foundUser = this.users.find(u => u.id === this.Answer.user_id);
+      this.userNameToShow = foundUser ? foundUser.name : '';
+
+      // Buscar y guardar el nombre del usuario para mostrarlo en modo "view"
+      const foundQuestion = this.questions.find(u => u.id === this.Answer.security_question_id);
+      this.userQuestionToShow = foundQuestion ? foundQuestion.name : '';
+        
       },
       error: (error) => {
         console.error("Error fetching Answer:", error);
@@ -122,8 +132,8 @@ export class ManageComponent implements OnInit {
       });
       return;
     }
-    this.AnswersService.create(this.theFormGroup.value.userId,
-  this.theFormGroup.value.questionId,
+    this.AnswersService.create(this.theFormGroup.value.user_id,
+  this.theFormGroup.value.security_question_id,
   { content: this.theFormGroup.value.content }).subscribe({
       next: (Answer) => {
         console.log("Answer created successfully:", Answer);
