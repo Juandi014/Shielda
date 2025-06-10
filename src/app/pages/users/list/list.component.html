@@ -27,7 +27,7 @@
                   <button class="btn btn-danger btn-sm" (click)="delete(user.id)">Delete</button>
                   <button class="btn btn-secondary btn-sm" [routerLink]="['/profile', user.id]">Profile</button>
                   <button class="btn btn-secondary btn-sm" [routerLink]="['/addresses', user.id]">Address</button>
-                  <button class="btn btn-secondary btn-sm" [routerLink]="['/users/signature', user.id]">DigitalSignature</button>
+                  <button class="btn btn-secondary btn-sm" [routerLink]="['/digital-signatures/create', user.id]">DigitalSignature</button>
                   <button class="btn btn-secondary btn-sm" [routerLink]="['/devices/user', user.id]">Devices</button>
                   <button class="btn btn-secondary btn-sm" [routerLink]="['/passwords/user', user.id]">Passwords</button>
                   <button class="btn btn-secondary btn-sm" [routerLink]="['/sessions/user', user.id]">Sessions</button>

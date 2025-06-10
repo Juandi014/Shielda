@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { ROUTES } from '../sidebar/sidebar.component';
 import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { Router } from '@angular/router';
@@ -17,12 +17,14 @@ export class NavbarComponent implements OnInit {
   public location: Location;
   user: User;
   subscription: Subscription;
+  mostQueriedEntity: string = '';
 
   constructor(
     location: Location,
     private element: ElementRef,
     private router: Router,
-    private securityService: SecurityService
+    private securityService: SecurityService,
+    private cdr: ChangeDetectorRef
   ) {
     this.location = location;
     this.subscription = this.securityService.getUser().subscribe(data => {
@@ -36,6 +38,8 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
     this.listTitles = ROUTES.filter(listTitle => listTitle);
+    this.updateMostQueried();
+    
   }
 
   getTitle() {
@@ -62,5 +66,21 @@ export class NavbarComponent implements OnInit {
     }
     return `hsl(${hash % 360}, 60%, 50%)`;
   }
+  updateMostQueried(): void {
+    const users = +localStorage.getItem('counter_users')! || 0;
+    const roles = +localStorage.getItem('counter_roles')! || 0;
+    const permissions = +localStorage.getItem('counter_permissions')! || 0;
+
+    const max = Math.max(users, roles, permissions);
+    const tied = [];
+
+    if (users === max) tied.push('Users');
+    if (roles === max) tied.push('Roles');
+    if (permissions === max) tied.push('Permissions');
+
+    this.mostQueriedEntity = tied.length ? tied[Math.floor(Math.random() * tied.length)] : '';
+    this.cdr.detectChanges();
+  }
+
 }
 

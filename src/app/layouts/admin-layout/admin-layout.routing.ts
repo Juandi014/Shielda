@@ -125,5 +125,7 @@ export const AdminLayoutRoutes: Routes = [
                 loadChildren: () => import('src/app/pages/role-permissions/role-permissions.module').then(m => m.RolePermissionsModule)
             },
         ]
-    }
+    },
+    
+
 ];

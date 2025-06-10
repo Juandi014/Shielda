@@ -1,34 +1,41 @@
-<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
-</div>
-<!-- Page content -->
 <div class="container-fluid mt--7">
-    <!-- Table -->
-    <div class="row">
-        <div class="col">
-            <div class="card shadow">
-                <div class="card-header bg-transparent">
-                    <h3 class="mb-0">Digital Signatures</h3>
-                    <button class="btn btn-success" (click)="create()">Crear</button>
-                </div>
-                <div class="card-body">
-                    <table class="table">
-                        <tr>
-                            <td>Id</td>
-                            <td>Photo</td>
-                            <td>Opciones</td>
-                        </tr>
-                        <tr *ngFor="let digitalSignature of digitalSignatures">
-                            <td>{{digitalSignature.id}}</td>
-                            <td>{{digitalSignature.photo}}</td>
-                            <td>
-                                <button class="btn btn-warning" (click)="view(digitalSignature.id)">Ver</button>
-                                <button class="btn btn-primary" (click)="edit(digitalSignature.id)">Editar</button>
-                                <button class="btn btn-danger" (click)="delete(digitalSignature.id)">Eliminar</button>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
+  <div class="row">
+    <div class="col">
+      <div class="card shadow">
+        <div class="card-header bg-transparent">
+          <h3 class="mb-0">Digital Signatures</h3>
+          <button class="btn btn-success" (click)="create()">Crear</button>
         </div>
+        <div class="card-body">
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>ID Persona</th>
+                <th>Nombre</th>
+                <th>Firma</th>
+                <th>Opciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let digitalSignature of digitalSignatures">
+                <td>{{ digitalSignature.userId }}</td>
+                <td>{{ digitalSignature.userName }}</td>
+                <td>
+                  <img *ngIf="digitalSignature.photo"
+                       [src]="digitalSignature.photo"
+                       alt="Firma"
+                       style="height: 60px; border: 1px solid #ccc;" />
+                </td>
+                <td>
+                  <button class="btn btn-warning btn-sm" (click)="view(digitalSignature.id)">Ver</button>
+                  <button class="btn btn-primary btn-sm" (click)="edit(digitalSignature.id)">Editar</button>
+                  <button class="btn btn-danger btn-sm" (click)="delete(digitalSignature.id)">Eliminar</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
